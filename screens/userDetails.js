@@ -9,8 +9,14 @@ import { getAuth } from "firebase/auth";
 
 export default function UserDetails ({route, navigation}) {
 
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const [user, setUser] = useState('');
+
+  const getUser = () => {
+    
+    const auth = getAuth();
+    const cuser = auth.currentUser;
+    setUser(cuser);
+  }
 
 
   const calluser = () => {
@@ -27,6 +33,7 @@ export default function UserDetails ({route, navigation}) {
     }
   }
   useEffect(() => {
+    getUser();
   }, []);
 
 

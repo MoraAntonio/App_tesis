@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
 } from "react-native";
 
 import {
@@ -23,11 +22,15 @@ import {
 
 //mapa
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useMap } from "../functions/usemap";
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from "../database/firebase";
 import { AuthErrorCodes, getAdditionalUserInfo, getAuth } from "firebase/auth";
 import { Marker } from "react-native-maps";
+
+//custom components
+import ItemDivider from "../components/ItemDivider";
 
 
 
@@ -57,6 +60,17 @@ const PostDetails = (props) => {
     const cuser = auth.currentUser;
     setUser(cuser);
   }
+
+  //funciones del mapa
+
+    const {
+      mapRef,
+      selectedMarker,
+      handleNavigateToPoint,
+      handelResetInitialPosition,
+    } = useMap();
+
+
 
 
 
@@ -88,39 +102,26 @@ const PostDetails = (props) => {
     getPostById(props.route.params.postId);
   }, []);
 
+  if (user){
   if (user.uid == post.id_arrendador) {
 
     return (
       <ScrollView style={styles.container}>
         <View style={styles.square}>
           <Text style={styles.title}>{post.titulo}</Text>
+
           <Text style={styles.desc}>Descripcion</Text>
+          <ItemDivider/>
           <Text style={styles.desc2}>{post.descripcion}</Text>
+          <ItemDivider/>
           <Text style={styles.par}>Precio/noche: {post.precio}$</Text>
           <Text style={styles.par}>Fecha inicio: {printd1}</Text>
           <Text style={styles.par}>Fecha de cierre: {printd2}</Text>
           <Text style={styles.par}>Fecha de publicacion: {printd3}</Text>
           <Text style={styles.par}>Arrendador: {post.nombre_arrendador}</Text>
 
-          <MapView
-            customMapStyle={styles.mapStyle}
-            provider={PROVIDER_GOOGLE}
-            style={styles.mapStyle}
-            initialRegion={{
-              latitude: post.ubicacion.latitude,
-              longitude: post.ubicacion.longitude,
-              latitudeDelta: 0.003,
-              longitudeDelta: 0.003,
-            }}
-            mapType="standard"
-          >
-            <Marker
-            coordinate={{
-              latitude: post.ubicacion.latitude,
-              longitude: post.ubicacion.longitude,
-            }}
-          ></Marker>
-          </MapView>
+
+          
 
 
 
@@ -136,6 +137,7 @@ const PostDetails = (props) => {
     )
   }
   else {
+
     return (
       <ScrollView style={styles.container}>
         <View style={styles.square}>
@@ -148,7 +150,42 @@ const PostDetails = (props) => {
           <Text style={styles.par}>Fecha de publicacion: {printd3}</Text>
           <Text style={styles.par}>Arrendador: {post.nombre_arrendador}</Text>
 
+     
 
+              <TouchableOpacity style={styles.button} onPress={() => {props.navigation.navigate('Reservar', {
+              postId: post.id 
+            })}}>
+              <Text style={styles.buttontxt} >Reservar</Text>
+              </TouchableOpacity> 
+        </View>
+      </ScrollView>
+
+    )
+
+  }
+}
+  else {
+    return (
+      <ScrollView style={styles.container}>
+        <View style={styles.square}>
+          <Text style={styles.title}>{post.titulo}</Text>
+          <Text style={styles.desc}>Descripcion</Text>
+          <Text style={styles.desc2}>{post.descripcion}</Text>
+          <ItemDivider/>
+          <Text style={styles.par}>Precio/noche: {post.precio}$</Text>
+          <ItemDivider/>
+          <Text style={styles.par}>Fecha inicio: {printd1}</Text>
+          <ItemDivider/>
+          <Text style={styles.par}>Fecha de cierre: {printd2}</Text>
+          <ItemDivider/>
+          <Text style={styles.par}>Fecha de publicacion: {printd3}</Text>
+          <ItemDivider/>
+          <Text style={styles.par}>Arrendador: {post.nombre_arrendador}</Text>
+          <ItemDivider/>
+
+          <MapView
+                region={'Africa'}
+            />
 
               <TouchableOpacity style={styles.button} onPress={() => {props.navigation.navigate('Reservar', {
               postId: post.id 
@@ -156,8 +193,6 @@ const PostDetails = (props) => {
               <Text style={styles.buttontxt} >Reservar</Text>
               </TouchableOpacity>
 
-
-          
         </View>
       </ScrollView>
 
@@ -210,8 +245,8 @@ const styles = StyleSheet.create({
   },
 par: {
   color: '#ffffff',
-  marginBottom: '5%',
-  fontSize: 14,
+  marginVertical: '4%',
+  fontSize: 16,
   fontWeight: 'bold',
 },
 
@@ -220,7 +255,7 @@ par: {
     width: "60%",
     marginHorizontal: '20%',
     backgroundColor: '#fff',
-    marginTop: '5%',
+    marginTop: '10%',
     marginBottom: "10%",
     borderRadius: 5,
     padding: '2%',

@@ -12,11 +12,9 @@ import {
 
 import firebase from "../database/firebase";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { NavigationContainer } from "@react-navigation/native";
-import { AuthErrorCodes, getAuth } from "firebase/auth";
-import MapInput, { MapInputVariant } from 'react-native-map-input';
 
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useMap } from "../functions/usemap";
 
 const CreatePostScreen = (props) => {
   const initalState = {
@@ -28,12 +26,13 @@ const CreatePostScreen = (props) => {
     fecha_publicacion: "",
   };
 
-  const [coordinate, setCoordinate] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
+  const {
+    mapRef,
+    selectedMarker,
+    handleNavigateToPoint,
+    handelResetInitialPosition,
+  } = useMap();
+
 
   
 
@@ -137,12 +136,13 @@ const CreatePostScreen = (props) => {
       <View style={styles.square}>
 
 
+
       {/* Email Input */}
       <View style={styles.inputGroup}>
         <TextInput
           placeholder="Titulo"
           multiline={true}
-          numberOfLines={4}
+          numberOfLines={1}
           onChangeText={(value) => handleChangeText(value, "titulo")}
           value={state.titulo}
           maxLength={30}
@@ -154,10 +154,10 @@ const CreatePostScreen = (props) => {
         <TextInput
           placeholder="Descripcion"
           multiline={true}
-          numberOfLines={4}
+          numberOfLines={3}
           onChangeText={(value) => handleChangeText(value, "descripcion")}
           value={state.descripcion}
-          maxLength={60}
+          maxLength={100}
         />
       </View>
 
@@ -171,6 +171,24 @@ const CreatePostScreen = (props) => {
         />
         
       </View>
+
+      <TouchableOpacity onPress={() => {props.navigation.navigate('Crear Ubicacion')}}>
+      <MapView
+        ref={mapRef}
+        customMapStyle={styles.mapStyle}
+        provider={PROVIDER_GOOGLE}
+        style={styles.mapStyle}
+        showsUserLocation={true}
+        initialRegion={{
+          latitude: 41.3995345,
+          longitude: 2.1909796,
+          latitudeDelta: 0.003,
+          longitudeDelta: 0.003,
+        }}>
+      
+    
+      </MapView>
+      </TouchableOpacity>
 
 
       <Text styles={styles.par}>Fecha de inicio:  {printd1}</Text>
@@ -233,17 +251,19 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     flex: 1,
-    padding: 0,
-    marginVertical: '15%',
+    marginTop: '5%',
+    marginBottom: '5%',
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc",
+    height: '2%',
+    backgroundColor: '#ffffff',
   },
   
   square: {
     width: '88%',
     marginTop: '3%',
     marginHorizontal: '6%',
-    backgroundColor:  '#ff8f33',
+    backgroundColor:  '#5cc3ff',
     paddingHorizontal: '5%',
     paddingTop: '7%',
     paddingBottom: '5%',
@@ -287,8 +307,10 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     width: '100%',
-    height: '35%',
+    height: '50%',
     marginBottom: '5%',
+    marginTop: '5%',
+    borderRadius: 20,
     borderRadius: 20,
   },
   buttontext: {

@@ -22,11 +22,7 @@ const SearchHome = ({ route, navigation }) => {
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [posts, setPosts] = useState([]);
 
-
-
-
-
-  useEffect(() => {
+  const getPosts = () => {
     firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
       const posts = [];
       querySnapshot.docs.forEach((doc) => {
@@ -39,7 +35,14 @@ const SearchHome = ({ route, navigation }) => {
         });
       });
       setPosts(posts);
+      
     });
+  }
+
+
+
+  useEffect(() => {
+    getPosts();
 
 
   }, []);
@@ -58,7 +61,8 @@ const SearchHome = ({ route, navigation }) => {
       setFilteredDataSource(newData);
       setSearch(text);
     } else {
-      // Actualizar los datos filtrados
+      //crear cartas para todas las publicaciones
+      getPosts();
       setFilteredDataSource(posts);
       setSearch(text);
     }
