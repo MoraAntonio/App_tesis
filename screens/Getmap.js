@@ -32,10 +32,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 export default function GetMap(props) {
   // Define position state: {latitude: number, longitude: number}
   const [position, setPosition] = useState({})
-  const [marker, setMarker] = useState({
-    latitude: 0,
-    longitude: 0,
-  });
+  const [marker, setMarker] = useState(null);
 
   const {
     mapRef,
@@ -110,7 +107,11 @@ export default function GetMap(props) {
           console.log(marker)
         }
       }>
-      <Marker coordinate={marker}/> 
+        {marker !== null && (
+          <Marker coordinate={marker}/> 
+        )}
+
+      
         
       </MapView>
       <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation()}>

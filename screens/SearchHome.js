@@ -141,6 +141,12 @@ if (search !== "") {
           underlineColorAndroid="transparent"
           placeholder="Busque Aqui"
       />
+      <FlatList
+          style={styles.flatlist}
+          data={posts}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={ItemView}
+        />
       <TouchableOpacity style={styles.postbutton} onPress={gotocreate}>
             <Text style={styles.postbuttontext}>+</Text>  
           </TouchableOpacity>

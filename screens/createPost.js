@@ -16,6 +16,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useMap } from "../functions/usemap";
 
+import { getAuth } from "firebase/auth";
+
 import * as TaskManager from "expo-task-manager"
 import * as Location from "expo-location"
 import { Marker } from "react-native-svg";
@@ -75,7 +77,8 @@ const CreatePostScreen = (props) => {
   }
 
 
-
+  const auth = getAuth();
+  const user = auth.currentUser;
 
 
   const initalState = {
@@ -104,7 +107,7 @@ const CreatePostScreen = (props) => {
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
   const [position, setPosition] = useState({})
-  const [user, setUser] = useState('');
+  const [marker, setMarker] = useState(null);
 
 
 
@@ -169,8 +172,7 @@ const CreatePostScreen = (props) => {
       Alert.alert('La fecha de cierre no puede ser antes de la fecha actual')
     }
     else {
-      const userid =  props.route.params.userid;
-      const username =  props.route.params.username;
+
       console.log(posc.latitude + ',' + posc.longitude)
       try {
         await firebase.db.collection("publicaciones").add({
@@ -180,6 +182,8 @@ const CreatePostScreen = (props) => {
             fecha_inicio: date1,
             fecha_fin: date2,
             fecha_publicacion: new Date(),
+            id_arrendador: user.uid,
+            nombre_arrendador: user.displayName,
             ubicacion: posc,
         });
         Alert.alert('Publicacion creada!');
@@ -202,7 +206,7 @@ const CreatePostScreen = (props) => {
       startForegroundUpdate();
     }
     
-  }, [])
+  }, [props.route.params.sharep])
 
   const SmallMap = () => {
 
@@ -224,12 +228,9 @@ const CreatePostScreen = (props) => {
             latitudeDelta: 0.0100,
             longitudeDelta: 0.0100,
           }}>
-            <Marker coordinate={{
-              latitude: posc.latitude,
-              longitude: posc.longitude,
-              latitudeDelta: 0.0100,
-              longitudeDelta: 0.0100,
-            }}/> 
+                   {marker !== null && (
+          <Marker coordinate={marker}/> 
+        )}
         </MapView>
         </TouchableOpacity>
       )
