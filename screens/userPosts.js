@@ -5,7 +5,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import firebase from "../database/firebase";
 
-const BookIndex = (props) => {
+const UserPosts = (props) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -46,4 +46,4 @@ const BookIndex = (props) => {
   );
 };
 
-export default BookIndex;
+export default UserPosts;

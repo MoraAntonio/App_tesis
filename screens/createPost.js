@@ -66,9 +66,17 @@ const CreatePostScreen = (props) => {
     foregroundSubscription?.remove()
 
     // Start watching position in real-time
-    
-        setPosition(location.coords);
-        
+    foregroundSubscription = await Location.watchPositionAsync(
+      {
+        // For better logs, we set the accuracy to the most sensitive option
+        accuracy: Location.Accuracy.BestForNavigation,
+      },
+      location => {
+        setPosition(location.coords)
+        console.log(position)
+        console.log(marker)
+      }
+    )
   }
 
   // Stop location tracking in foreground
@@ -212,60 +220,6 @@ const CreatePostScreen = (props) => {
     
   }, [props.route.params.sharep])
 
-  const SmallMap = () => {
-
-
-
-
-    if (posc){
-      return (      
-        <TouchableOpacity onPress={() => {props.navigation.navigate('Crear Ubicacion')}}>
-        <MapView
-          ref={mapRef}
-          customMapStyle={styles.mapStyle}
-          provider={PROVIDER_GOOGLE}
-          style={styles.mapStyle}
-          showsUserLocation={true}
-          initialRegion={{
-            latitude: posc.latitude,
-            longitude: posc.longitude,
-            latitudeDelta: 0.0100,
-            longitudeDelta: 0.0100,
-          }}>
-                   {marker !== null && (
-          <Marker coordinate={marker}/> 
-        )}
-        </MapView>
-        </TouchableOpacity>
-      )
-
-    } else {
-      return (      
-        <TouchableOpacity onPress={() => {props.navigation.navigate('Crear Ubicacion')}}>
-        <View>
-        <MapView
-          ref={mapRef}
-          customMapStyle={styles.mapStyle}
-          provider={PROVIDER_GOOGLE}
-          style={styles.mapStyle}
-          showsUserLocation={true}
-          initialRegion={{
-            latitude: position?.latitude,
-            longitude: position?.longitude,
-            latitudeDelta: 0.0100,
-            longitudeDelta: 0.0100,
-          }}>
-            
-        </MapView>
-        </View>
-        </TouchableOpacity>
-      )
-    }
-    
-  }
-
-
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.square}>
@@ -318,7 +272,25 @@ const CreatePostScreen = (props) => {
 
       <Text>{posc.latitude}</Text>
       <Text>{posc.longitude}</Text>
-      <SmallMap/>
+      
+      <TouchableOpacity onPress={() => {props.navigation.navigate('Crear Ubicacion')}}>
+        <MapView
+          ref={mapRef}
+          customMapStyle={styles.mapStyle}
+          provider={PROVIDER_GOOGLE}
+          style={styles.mapStyle}
+          showsUserLocation={true}
+          initialRegion={{
+            latitude: posc.latitude,
+            longitude: posc.longitude,
+            latitudeDelta: 0.0100,
+            longitudeDelta: 0.0100,
+          }}>
+                   {marker !== null && (
+          <Marker coordinate={marker}/> 
+        )}
+        </MapView>
+        </TouchableOpacity>
 
 
       <Text styles={styles.par}>Fecha de inicio:  {printd1}</Text>

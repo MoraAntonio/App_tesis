@@ -21,6 +21,9 @@ import WhiteSpace from "../screens/UserWhiteSpace";
 //Rama de reservaciones
 import BookIndex from "../screens/BookIndex";
 
+//Rama de publicaciones del usuario actual
+import UserPosts from "../screens/userPosts";
+
 import { getAuth } from "firebase/auth";
 
 
@@ -61,6 +64,14 @@ const BookStackNavigator = () => {
   );
 }
 
+const UserPostStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Mis Publicaciones" component={UserPosts} />
+    </Stack.Navigator>
+  );
+}
+
 const UserStackNavigator = () => {
 
     return (
@@ -80,4 +91,4 @@ const UserStackNavigator = () => {
 }
 
 export { SearchStackNavigator, BookStackNavigator,
-         UserStackNavigator };
+         UserPostStackNavigator, UserStackNavigator };

@@ -11,9 +11,6 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
   return (
     
-
-
-    
     <NavigationContainer>
     <BottomTabNavigator />
     </NavigationContainer>

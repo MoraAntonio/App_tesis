@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { SearchStackNavigator,
          BookStackNavigator,
+         UserPostStackNavigator, 
          UserStackNavigator} from "./StackNavigator";
         import firebase from "firebase/compat";
 
@@ -32,6 +33,10 @@ const BottomTabNavigator = () => {
                 iconName = focused
                 ? 'md-receipt'
                 : 'md-receipt-outline'
+            } else if (rn === "Publicaciones") {
+              iconName = focused
+              ? 'calendar'
+              : 'calendar-outline'
             } else if (rn === "Usuario") {
                 iconName = focused
                 ? 'person'
@@ -51,6 +56,7 @@ const BottomTabNavigator = () => {
       >
         <Tab.Screen name="Buscar" component={SearchStackNavigator} />
         <Tab.Screen name="Reservaciones" component={BookStackNavigator} />
+        <Tab.Screen name="Publicaciones" component={UserPostStackNavigator} />
         <Tab.Screen name="Usuario" component={UserStackNavigator} />
 
   
