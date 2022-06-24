@@ -73,10 +73,9 @@ const CreatePostScreen = (props) => {
       },
       location => {
         setPosition(location.coords)
-        console.log(position)
-        console.log(marker)
       }
     )
+        
   }
 
   // Stop location tracking in foreground
@@ -205,7 +204,12 @@ const CreatePostScreen = (props) => {
     }//close ifs
   };
 
-  const [posc, setPosc] = useState({});
+  const goToMap = () => {
+    stopForegroundUpdate();
+    props.navigation.navigate('Crear Ubicacion');
+  }
+
+  const [posc, setPosc] = useState(position);
 
   
   useEffect(() => {
@@ -219,6 +223,12 @@ const CreatePostScreen = (props) => {
     }
     
   }, [props.route.params.sharep])
+
+
+    
+  
+
+
 
   return (
     <ScrollView style={styles.container}>
@@ -273,7 +283,9 @@ const CreatePostScreen = (props) => {
       <Text>{posc.latitude}</Text>
       <Text>{posc.longitude}</Text>
       
-      <TouchableOpacity onPress={() => {props.navigation.navigate('Crear Ubicacion')}}>
+      <TouchableOpacity onPress={() => {goToMap()}
+      
+    }>
         <MapView
           ref={mapRef}
           customMapStyle={styles.mapStyle}
@@ -281,14 +293,20 @@ const CreatePostScreen = (props) => {
           style={styles.mapStyle}
           showsUserLocation={true}
           initialRegion={{
-            latitude: posc.latitude,
-            longitude: posc.longitude,
+            latitude: position.latitude,
+            longitude: position.longitude,
             latitudeDelta: 0.0100,
             longitudeDelta: 0.0100,
           }}>
-                   {marker !== null && (
-          <Marker coordinate={marker}/> 
-        )}
+
+        <Marker coordinate={{
+          latitude: posc.latitude,
+          longitude: posc.longitude,
+          latitudeDelta: 0.0100,
+          longitudeDelta: 0.0100,
+        }}/>
+
+          
         </MapView>
         </TouchableOpacity>
 
@@ -408,7 +426,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   mapStyle: {
-    width: '100%',
     height: 250,
     marginTop: '5%',
     borderRadius: 20,

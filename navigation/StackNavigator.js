@@ -68,6 +68,8 @@ const UserPostStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Mis Publicaciones" component={UserPosts} />
+      <Stack.Screen name="Detalles" component={PostDetails} />
+      <Stack.Screen name="Editar" component={UpdatePostScreen} />
     </Stack.Navigator>
   );
 }

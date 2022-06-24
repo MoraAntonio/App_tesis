@@ -43,8 +43,6 @@ const SearchHome = ({ route, navigation }) => {
 
   useEffect(() => {
     getPosts();
-
-
   }, []);
 
   const searchFilterFunction = (text) => {
