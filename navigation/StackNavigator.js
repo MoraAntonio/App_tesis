@@ -9,6 +9,7 @@ import CreatePostScreen from "../screens/createPost";
 import CheckInScreen from "../screens/CheckInScreen";
 import UpdatePostScreen from "../screens/UpdatePost";
 import GetMap from "../screens/Getmap";
+import CheckIn2 from "../screens/CheckIn2";
 
 //Rama del usuario
 import SignUpScreen from "../screens/SignUpScreen";
@@ -45,7 +46,7 @@ const SearchStackNavigator = () => {
       <Stack.Screen name="Reservar" component={CheckInScreen} />
       <Stack.Screen name="Editar" component={UpdatePostScreen} />
       <Stack.Screen name="Crear Ubicacion" component={GetMap} />
-      
+      <Stack.Screen name="Confirmar pago" component={CheckIn2} />
       
     </Stack.Navigator>
   );

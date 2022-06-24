@@ -8,12 +8,14 @@ import {
   ScrollView,
   TouchableOpacity,
   ShadowPropTypesIOS,
+  Alert,
 } from "react-native";
 
 import firebase from "../database/firebase";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { NavigationContainer } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
+import PostDetails from "./postDetails";
 
 
 const CheckInScreen = (props) => {
@@ -22,18 +24,18 @@ const CheckInScreen = (props) => {
   const user = auth.currentUser;
 
     const initialState = {
-          cantidadpers: '',
+          cpers: '',
         };
       
     const [state, setState] = useState(initialState);
-    const [post, setPost] = useState('');
+    const [post, setPost]   = useState('');
     const [date1Picker, setDate1Picker] = useState(false);
     const [date2Picker, setDate2Picker] = useState(false);
     const [date1, setDate1] = useState(new Date());
     const [date2, setDate2] = useState(new Date());
     
-    const getPostById = async () => {
-        const dbRef = firebase.db.collection("publicaciones").doc(props.route.params.postId);
+    const getPostById = async (id) => {
+        const dbRef = firebase.db.collection("publicaciones").doc(id);
         const doc = await dbRef.get();
         const post = doc.data();
         setPost({ ...post, id: doc.id });
@@ -89,9 +91,51 @@ const CheckInScreen = (props) => {
         setDate2Picker(false);
       };
 
+      const printd1 = date1.getDate() + '-' + date1.getMonth() + '-' + date1.getFullYear();
+      const printd2 = date2.getDate() + '-' + date2.getMonth() + '-' + date2.getFullYear();
+      
+      const tdifference = date2.getTime() - date1.getTime();
+  
+      const days = tdifference / (1000 * 3600 * 24); 
+      const thisDate = new Date();
+      
+
+      const goSaveCheck = () => {
+        if (!state.cpers){
+          Alert.alert('Debe ingresar el numero de personas a hospedarse')
+        }
+        else if (isNaN(state.cpers)) {
+          Alert.alert('Debe ingresar un valor numerico')
+        }
+        else if (printd1 === printd2){
+          Alert.alert('La fecha de inicio no puede ser la misma que la fecha final')
+        }
+        else if (date1 > date2) {
+          Alert.alert('La fecha de inicio no puede ser despues de la fecha de cierre')
+        }
+        else if (date2 < thisDate) {
+          Alert.alert('La fecha de cierre no puede ser antes de la fecha actual')
+        }
+        else {
+
+          const checkhold = {
+            postId: post.id,
+            ndays: days,
+            cdate1: date1,
+            cdate2: date2,
+            cpers: state.cpers,
+          }
+
+          props.navigation.navigate('Confirmar pago', {
+            checkhold: checkhold
+          })
+        }
+        
+      }
+
       useEffect(() => {
-        getPostById();
-      }, []);
+        getPostById(props.route.params.postId);
+      }, [props.route.params.postId]);
 
       return (
 
@@ -100,8 +144,8 @@ const CheckInScreen = (props) => {
       <View style={styles.inputGroup}>
         <TextInput
           placeholder="Cantidad de personas"
-          onChangeText={(value) => handleChangeText(value, "precio")}
-          value={state.precio}
+          onChangeText={(value) => handleChangeText(value, "cpers")}
+          value={state.cpers}
           keyboardType={'number-pad'}
         />
         
@@ -146,11 +190,9 @@ const CheckInScreen = (props) => {
           </TouchableOpacity>
         )}
 
-      <View style={styles.button}>
         <TouchableOpacity style={styles.button} onPress={() => goSaveCheck()}>
           <Text style={styles.buttontext} >Registrar reservacion</Text>
         </TouchableOpacity>
-      </View>
     </ScrollView>
 
     )

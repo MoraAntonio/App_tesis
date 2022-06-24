@@ -88,6 +88,7 @@ const CreatePostScreen = (props) => {
     fecha_inicio: "",
     fecha_fin: "",
     fecha_publicacion: "",
+    max_personas: "",
   };
 
   const {
@@ -137,6 +138,8 @@ const CreatePostScreen = (props) => {
 
   const printd1 = date1.getDate() + '-' + date1.getMonth() + '-' + date1.getFullYear();
   const printd2 = date2.getDate() + '-' + date2.getMonth() + '-' + date2.getFullYear();
+  
+  
   const saveNewPost = async () => {
 
     const thisDate = new Date();
@@ -185,6 +188,7 @@ const CreatePostScreen = (props) => {
             id_arrendador: user.uid,
             nombre_arrendador: user.displayName,
             ubicacion: posc,
+            max_personas: state.max_personas
         });
         Alert.alert('Publicacion creada!');
       } catch (error) {
@@ -296,6 +300,17 @@ const CreatePostScreen = (props) => {
           onChangeText={(value) => handleChangeText(value, "precio")}
           keyboardType={'numeric'}
           value={state.precio}
+          maxLength={3}
+        />
+        
+      </View>
+
+      <View style={styles.inputGroup}>
+        <TextInput
+          placeholder="Cantidad maxima de personas"
+          onChangeText={(value) => handleChangeText(value, "max_personas")}
+          keyboardType={'numeric'}
+          value={state.max_personas}
           maxLength={3}
         />
         
