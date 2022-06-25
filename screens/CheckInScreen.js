@@ -39,32 +39,10 @@ const CheckInScreen = (props) => {
         const doc = await dbRef.get();
         const post = doc.data();
         setPost({ ...post, id: doc.id });
-        console.log(post);
       };
 
 
-    const saveCheck = async () => {
-
-        try {
-          await firebase.db.collection("reservaciones").add({
-            fecha_inicio: date1,
-            fecha_fin: date2,
-            fecha_creacion: new Date(),
-            id_huesped: user.uid,
-            nombre_huesped: user.displayName,
-            id_publicacion: post.id,
-            cantidad_personas: 'si',
-        });
-        props.navigation.navigate('PDetails', {
-          postId: post.id,
-        })
-            console.log(user);
-            
-          } catch (error) {
-            console.log(error)
-          }
-
-    };
+    
 
     const handleChangeText = (value, name) => {
       setState({ ...state, [name]: value });
@@ -106,6 +84,8 @@ const CheckInScreen = (props) => {
         }
         else if (isNaN(state.cpers)) {
           Alert.alert('Debe ingresar un valor numerico')
+        } else if (state.cpers > post.max_personas) {
+          Alert.alert('El maximo de personas para este servicio es de: ' + post.max_personas)
         }
         else if (printd1 === printd2){
           Alert.alert('La fecha de inicio no puede ser la misma que la fecha final')

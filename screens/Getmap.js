@@ -84,7 +84,7 @@ export default function GetMap(props) {
   const goBackWithLocation = () => {
     stopForegroundUpdate();
     props.navigation.navigate('Crear Publicacion', {
-    sharep: marker,  
+    sharep: marker,
     })
   }
 

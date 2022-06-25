@@ -1,23 +1,33 @@
 import express from "express";
+import Stripe from "stripe";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 const app = express();
 const port = 3000; //add your port here
 const PUBLISHABLE_KEY = "pk_test_51LEDRKDwNZZEyNd2KAypoPBKoApVUzhClPcPzP9W0Jt4WNLL0Csz8xIpTkO6GvqCXYKOzTIaF4bvahnj7hoqDGUw001tZ3oXiv";
 const SECRET_KEY = "sk_test_51LEDRKDwNZZEyNd2Re4JwOKtEUvwikW1ZZqAfVsQGWqbf1goTBxotvUwRKC4wOXkFbOhmO1LnOOZlANKNnSd8tym00zJWVKjAk";
-import Stripe from "stripe";
 
 //Confirm the API version from your stripe dashboard
 const stripe = Stripe(SECRET_KEY, { apiVersion: "2020-08-27" });
+
+app.use(cors());
+
+const jsonParser = bodyParser.json();
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
-app.post("/create-payment-intent", async (req, res) => {
+app.post("/create-payment-intent", jsonParser ,async (req, res) => {
   console.log('entre a la API')
   try {
+    console.log(req.body)
+    const body = req.body
+    const amount = body.amount;
+    
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1099, //lowest denomination of particular currency
+      amount, //lowest denomination of particular currency
       currency: "usd",
       payment_method_types: ["card"], //by default
     });

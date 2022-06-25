@@ -10,6 +10,8 @@ import CheckInScreen from "../screens/CheckInScreen";
 import UpdatePostScreen from "../screens/UpdatePost";
 import GetMap from "../screens/Getmap";
 import CheckIn2 from "../screens/CheckIn2";
+import PayScreen from "../screens/PayScreen";
+import StripeApp from "../screens/StripeApp";
 
 //Rama del usuario
 import SignUpScreen from "../screens/SignUpScreen";
@@ -23,11 +25,6 @@ import BookIndex from "../screens/BookIndex";
 
 //Rama de publicaciones del usuario actual
 import UserPosts from "../screens/userPosts";
-
-import { getAuth } from "firebase/auth";
-
-
-
 
 const Stack = createStackNavigator();
 
@@ -50,6 +47,8 @@ const SearchStackNavigator = () => {
       <Stack.Screen name="Editar" component={UpdatePostScreen} />
       <Stack.Screen name="Crear Ubicacion" component={GetMap} />
       <Stack.Screen name="Confirmar pago" component={CheckIn2} />
+      <Stack.Screen name="Detalles de pago" component={PayScreen} />
+      <Stack.Screen name="StripeApp" component={StripeApp} />
       
     </Stack.Navigator>
   );
