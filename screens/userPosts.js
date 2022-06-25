@@ -22,12 +22,13 @@ const UserPosts = (props) => {
         firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
           const posts = [];
           querySnapshot.docs.forEach((doc) => {
-            const { titulo, precio, descripcion } = doc.data();
+            const { titulo, precio, descripcion, id_arrendador } = doc.data();
             posts.push({
               id: doc.id,
               titulo,
               precio,
               descripcion,  
+              id_arrendador,
             });
           });
           setPosts(posts);
@@ -39,26 +40,25 @@ const UserPosts = (props) => {
     
       useEffect(() => {
         getPosts();
+        searchFilterFunction(userid);
       }, []);
     
-      const searchFilterFunction = (text) => {
+      const searchFilterFunction = (userid) => {
         //Validacion si la barra de busqueda no esta en blanco
-        if (text) {
+        if (userid) {
           const newData = posts.filter(function (item) {
             // Aplicar filtro con el texto en la barra de busqueda
-            const itemData = item.titulo
-              ? item.titulo.toUpperCase()
-              : ''.toUpperCase();
-            const textData = text.toUpperCase();
+            const itemData = item.id_arrendador
+            const textData = userid;
             return itemData.indexOf(textData) > -1;
           });
           setFilteredDataSource(newData);
-          setSearch(text);
+          setSearch(userid);
         } else {
           //crear cartas para todas las publicaciones
           getPosts();
           setFilteredDataSource(posts);
-          setSearch(text);
+          setSearch(id_arrendador);
         }
       };
 

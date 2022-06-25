@@ -172,13 +172,14 @@ const styles = StyleSheet.create({
 
   button: {
     marginTop: '5%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#dedede',
     width: "50%",
     paddingVertical: '3%',
+    borderRadius: 4,
   },
   buttontext: {
     textAlign: 'center',
-    color: '#5cc3ff',
+    color: '#ff00c8',
     fontWeight: 'bold',
   },
  
@@ -207,13 +208,15 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   Card: {
-    backgroundColor: '#5cc3ff',
+    backgroundColor: '#424242',
     width: "80%",
     alignSelf: 'center',
     paddingHorizontal: "10%",
     paddingTop: '5%',
     paddingBottom: '15%',
-    borderRadius: 20,
+    borderRadius: 15,
+    borderWidth: 4,
+    borderColor: '#ff00c8',
     elevation: 8,
     marginBottom: "10%",
     marginTop: "2%",

@@ -209,13 +209,13 @@ const CreatePostScreen = (props) => {
     props.navigation.navigate('Crear Ubicacion');
   }
 
-  const [posc, setPosc] = useState(position);
+  const [posc, setPosc] = useState(null);
 
   
   useEffect(() => {
 
     if (props.route.params.sharep) {
-      setPosc(props.route.params.sharep);
+      setPosc({...props.route.params.sharep});
       console.log(props.route.params.sharep);
     }
     else {
@@ -280,15 +280,21 @@ const CreatePostScreen = (props) => {
         
       </View>
 
-      <Text>{posc.latitude}</Text>
-      <Text>{posc.longitude}</Text>
+                {posc !== null && (
+                  <View>
+                    <Text>{posc.latitude}</Text>
+                    <Text>{posc.longitude}</Text>
+                    </View>
+            )}
+
+
       
-      <TouchableOpacity onPress={() => {goToMap()}
-      
-    }>
+      <TouchableOpacity 
+      onPress={() => {goToMap()}}
+      onLongPress={()=>{console.log("pressed")}}
+    >
         <MapView
           ref={mapRef}
-          customMapStyle={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
           style={styles.mapStyle}
           showsUserLocation={true}
@@ -299,12 +305,15 @@ const CreatePostScreen = (props) => {
             longitudeDelta: 0.0100,
           }}>
 
-        <Marker coordinate={{
-          latitude: posc.latitude,
-          longitude: posc.longitude,
-          latitudeDelta: 0.0100,
-          longitudeDelta: 0.0100,
-        }}/>
+          
+
+              <Marker coordinate={{
+                latitude: position.latitude,
+              }}/>
+            
+            
+
+        
 
           
         </MapView>

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import axios from 'axios';
 
 //ADD localhost address of your server
-const API_URL = "http://localhost:3000";
+const API_URL = "http://192.168.1.107:3000";
 
 const StripeApp = props => {
   const [email, setEmail] = useState();
@@ -11,13 +12,8 @@ const StripeApp = props => {
   const { confirmPayment, loading } = useConfirmPayment();
 
   const fetchPaymentIntentClientSecret = async () => {
-    const response = await fetch(`${API_URL}/create-payment-intent`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const { clientSecret, error } = await response.json();
+    const response = await axios.post(`${API_URL}/create-payment-intent`)
+    const { clientSecret, error } = await response.data;
     return { clientSecret, error };
   };
 
@@ -33,6 +29,7 @@ const StripeApp = props => {
     //2.Fetch the intent client secret from the backend
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+      console.log(clientSecret, error);
       //2. confirm the payment
       if (error) {
         console.log("Unable to process payment");

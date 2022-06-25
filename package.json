@@ -23,6 +23,7 @@
     "@react-navigation/stack": "^6.2.1",
     "@stream-io/flat-list-mvcp": "^0.10.2",
     "@stripe/stripe-react-native": "0.6.1",
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "consolidate": "^0.16.0",
     "ejs": "^3.1.8",

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { View, StyleSheet, Text, SafeAreaView, TextInput } from "react-native";
 
 import firebase from "../database/firebase";
+import StripeApp from "./StripeApp";
 
 const CheckIn2 = (props) => {
 
@@ -27,12 +28,13 @@ const CheckIn2 = (props) => {
       }, [props.route.params.checkhold]);
 
   return (
-      <View style={styles.center} >
-        <Text>{post.id}</Text>
-        <Text>{post.precio}$ x {days}</Text>
-        <Text>{amount}$</Text>
-     
-      </View>
+       <View>
+      {/* //   <Text>{post.id}</Text>
+      //   <Text>{post.precio}$ x {days}</Text>
+      //   <Text>{amount}$</Text> */}
+        <StripeApp style={styles.center}/>
+
+       </View>
 
   
   );
@@ -44,6 +46,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
+    paddingTop: 100,
   },
 });
 

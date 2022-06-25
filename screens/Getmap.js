@@ -110,8 +110,6 @@ export default function GetMap(props) {
         {marker !== null && (
           <Marker coordinate={marker}/> 
         )}
-
-      
         
       </MapView>
       <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation()}>
