@@ -14,6 +14,7 @@ app.listen(port, () => {
 });
 
 app.post("/create-payment-intent", async (req, res) => {
+  console.log('entre a la API')
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 1099, //lowest denomination of particular currency
