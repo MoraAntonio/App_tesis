@@ -14,11 +14,6 @@ import {
   View,
 } from "react-native";
 import PostCard from "../components/PostCard";
-import { Button } from "react-native-elements";
-import {PermissionsAndroid} from 'react-native';
-
-import * as ImagePicker from "expo-image-picker";
-
 const FAKE_IMAGES = [
   "https://a0.muscache.com/im/pictures/7b0190c7-3af2-4e3b-b3ed-24750a7f0314.jpg?im_w=1200",
   "https://a0.muscache.com/im/pictures/2f740368-6826-41fb-8a07-dea41f8e5132.jpg?im_w=720",
@@ -33,12 +28,13 @@ const SearchHome = ({ route, navigation }) => {
     firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
       const posts = [];
       querySnapshot.docs.forEach((doc) => {
-        const { titulo, precio, descripcion } = doc.data();
+        const { titulo, precio, descripcion, images } = doc.data();
         posts.push({
           id: doc.id,
           titulo,
           precio,
           descripcion,
+          images: images?.map(base64 => `data:image/png;base64,${base64}`) || FAKE_IMAGES
         });
       });
       setPosts(posts);
@@ -83,36 +79,7 @@ const SearchHome = ({ route, navigation }) => {
   };
 // mover a creacion de posts y no aqui
 
-async function cameraPermission() {
-  const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
-  console.log({granted})
-  if(granted === PermissionsAndroid.RESULTS.GRANTED) {
-    return true
-  } else {
-   return false
-  }
-}
 
-  const uploadImage = async () => {
-    console.log("INTENTANDO AGREGAR FOTO");
-    const allowed = await cameraPermission()
-  if (!allowed) {
-    console.log("NO DIO PERMISO DE FOTO")
-    return
-  }
-  console.log("SI DIO PERMISO DE FOTO")
-try {
-
-  const result = await ImagePicker.launchImageLibrary({ includeBase64: true });
-  const selectedImage = result.assets[0];
-  // selectedImage incluye una key llamada base64 que es lo que se guardara en firebase
-  // selecedImage incluye una key llamada uri que es la que usara para hacer el preview en la creacion
-  console.log(selectedImage);
-
-}catch(error) {
-console.log("HUBO UN ERROR" ,error)
-}
-  };
 
   useEffect(() => {
     getPosts();
@@ -128,7 +95,6 @@ console.log("HUBO UN ERROR" ,error)
           underlineColorAndroid="transparent"
           placeholder="Search Here"
         />
-        <Button onPress={uploadImage} title="Upload Image" />
         {search !== "" && (
           <FlatList
             data={filteredDataSource}
@@ -137,13 +103,14 @@ console.log("HUBO UN ERROR" ,error)
             renderItem={({ item }) => (
               <PostCard
                 heading={item.titulo}
-                images={FAKE_IMAGES}
+                images={item.images}
                 subheading={item.precio}
                 onPress={() =>
                   navigation.navigate("Detalles", {
                     postId: item.id,
                   })
                 }
+                home
               />
             )}
           />
@@ -156,13 +123,14 @@ console.log("HUBO UN ERROR" ,error)
             renderItem={({ item }) => (
               <PostCard
                 heading={item.titulo}
-                images={FAKE_IMAGES}
+                images={item.images}
                 subheading={item.precio}
                 onPress={() =>
                   navigation.navigate("Detalles", {
                     postId: item.id,
                   })
                 }
+                home
               />
             )}
           />

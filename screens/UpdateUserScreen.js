@@ -1,7 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text, SafeAreaView, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView, TextInput, ScrollView, Button } from "react-native";
+import { getAuth } from "firebase/auth";
 
 const UpdateUserScreen = (props) => {
+
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const updateUser = async () => {
     const userRef = firebase.db.collection("users").doc(user.id);
@@ -21,7 +25,7 @@ const UpdateUserScreen = (props) => {
       <TextInput
         placeholder="Name"
         autoCompleteType="username"
-        style={styles.inputGroup}
+        style={styles.input}
         value={user.name}
         onChangeText={(value) => handleTextChange(value, "name")}
       />
@@ -30,30 +34,14 @@ const UpdateUserScreen = (props) => {
       <TextInput
         autoCompleteType="email"
         placeholder="Email"
-        style={styles.inputGroup}
+        style={styles.input}
         value={user.email}
         onChangeText={(value) => handleTextChange(value, "email")}
       />
     </View>
-    <View>
-      <TextInput
-        placeholder="Phone"
-        autoCompleteType="tel"
-        style={styles.inputGroup}
-        value={user.phone}
-        onChangeText={(value) => handleTextChange(value, "phone")}
-      />
-    </View>
-    <View style={styles.btn}>
-      <Button
-        title="Delete"
-        onPress={() => openConfirmationAlert()}
-        color="#E37399"
-      />
-    </View>
-    <View>
+
+
       <Button title="Update" onPress={() => updateUser()} color="#19AC52" />
-    </View>
   </ScrollView>
   );
 };
@@ -64,6 +52,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
+    resizeMode: 'cover',
+  },
+  input: {
+    borderWidth: 1,
+    width: "80%",
+    height: "40%",
+    marginBottom: "5%",
+    backgroundColor: '#eeeeee',
+    paddingLeft: 5,
+    borderRadius: 8,
   },
 });
 

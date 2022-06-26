@@ -234,6 +234,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  input: {
+    borderWidth: 1,
+    width: "80%",
+    height: "15%",
+    marginBottom: "5%",
+    marginTop: '1%',
+    backgroundColor: '#eeeeee',
+    paddingLeft: 5,
+    borderRadius: 8,
+  },
   button: {
     backgroundColor: '#4287f5',
     marginTop: 5,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Text,
   Button,
@@ -8,19 +8,26 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  FlatList,
+  Image,
 } from "react-native";
 
 import firebase from "../database/firebase";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import storage from '@react-native-firebase/storage';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useMap } from "../functions/usemap";
+import PostCard from "../components/PostCard";
 
 import { getAuth } from "firebase/auth";
 
 import * as TaskManager from "expo-task-manager"
 import * as Location from "expo-location"
+import * as ImagePicker from 'expo-image-picker';
 import { Marker } from "react-native-svg";
+import { Camera } from 'expo-camera';
+
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME"
 let foregroundSubscription = null
@@ -44,7 +51,53 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
 const CreatePostScreen = (props) => {
 
-   // Request permissions right after starting the app
+  //image upload
+
+  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [camera, setCamera] = useState(null);
+  const [images, setImages] = useState([]);
+  const [b64Images, setB64Images] = useState([]);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const flatListRef = (useRef < FlatList) | (null > null);
+  const viewConfigRef = { viewAreaCoveragePercentThreshold: 95 };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const onViewRef = useRef(({ changed }) => {
+    if (changed[0].isViewable) {
+      setActiveIndex(changed[0].index);
+    }
+  });
+
+  const handleImageUpload = async () => {
+
+    // pidiendo permisos
+    const cameraStatus = await Camera.requestPermissionsAsync();
+      setHasCameraPermission(cameraStatus.status === 'granted');
+
+      const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setHasGalleryPermission(galleryStatus.status === 'granted');
+
+    pickImage();
+
+  }
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true,
+    });
+    console.log(result)
+    if (!result.cancelled) {
+      setImages([...images, result]);
+      setB64Images([...images.map(item=>item.base64), result.base64])
+    }
+
+  }
+
+  // Request permissions right after starting the app
 
 
   const requestPermissions = async () => {
@@ -75,7 +128,7 @@ const CreatePostScreen = (props) => {
         setPosition(location.coords)
       }
     )
-        
+
   }
 
   // Stop location tracking in foreground
@@ -106,7 +159,7 @@ const CreatePostScreen = (props) => {
   } = useMap();
 
 
-  
+
 
 
   const [state, setState] = useState(initalState);
@@ -145,34 +198,34 @@ const CreatePostScreen = (props) => {
 
   const printd1 = date1.getDate() + '-' + date1.getMonth() + '-' + date1.getFullYear();
   const printd2 = date2.getDate() + '-' + date2.getMonth() + '-' + date2.getFullYear();
-  
-  
+
+
   const saveNewPost = async () => {
 
     const thisDate = new Date();
 
-    if (!state.titulo){
+    if (!state.titulo) {
       Alert.alert('Debe ingresar un titulo para la publicacion');
     }
-    else if (state.titulo.length < 10 ) {
+    else if (state.titulo.length < 10) {
       Alert.alert('El titulo ndebe tener mas de 10 caracteres')
     }
-    else if(!state.descripcion) {
+    else if (!state.descripcion) {
       Alert.alert('La descripcion no puede estar vacia')
     }
-    else if (state.descripcion.length < 20 ) {
+    else if (state.descripcion.length < 20) {
       Alert.alert('La descripcion debe tener al menos 20 caracteres')
     }
-    else if (!state.precio){
+    else if (!state.precio) {
       Alert.alert('El precio no puede estar en blanco')
     }
-    else if (isNaN(state.precio)){
+    else if (isNaN(state.precio)) {
       Alert.alert('El precio debe ser un valor numerico')
     }
     else if (state.precio < 5) {
       Alert.alert('El precio no puede ser menor a 5 dolares')
     }
-    else if (printd1 === printd2){
+    else if (printd1 === printd2) {
       Alert.alert('La fecha de inicio no puede ser la misma que la fecha final')
     }
     else if (date1 > date2) {
@@ -184,18 +237,21 @@ const CreatePostScreen = (props) => {
     else {
 
       console.log(posc.latitude + ',' + posc.longitude)
+
+      console.log(b64Images.length)
       try {
         await firebase.db.collection("publicaciones").add({
-            titulo: state.titulo,
-            descripcion: state.descripcion,
-            precio: state.precio,
-            fecha_inicio: date1,
-            fecha_fin: date2,
-            fecha_publicacion: new Date(),
-            id_arrendador: user.uid,
-            nombre_arrendador: user.displayName,
-            ubicacion: posc,
-            max_personas: state.max_personas
+          titulo: state.titulo,
+          descripcion: state.descripcion,
+          precio: state.precio,
+          fecha_inicio: date1,
+          fecha_fin: date2,
+          fecha_publicacion: new Date(),
+          id_arrendador: user.uid,
+          nombre_arrendador: user.displayName,
+          ubicacion: posc,
+          max_personas: state.max_personas,
+          images: b64Images,
         });
         Alert.alert('Publicacion creada!');
       } catch (error) {
@@ -211,22 +267,24 @@ const CreatePostScreen = (props) => {
 
   const [posc, setPosc] = useState(null);
 
-  
+
   useEffect(() => {
 
     if (props.route.params.sharep) {
-      setPosc({...props.route.params.sharep});
+      setPosc({ ...props.route.params.sharep });
       console.log(props.route.params.sharep);
     }
     else {
       startForegroundUpdate();
     }
-    
+
   }, [props.route.params.sharep])
 
+  useEffect(() => {
+    console.log(images)
+  }, [images])
 
-    
-  
+
 
 
 
@@ -234,96 +292,96 @@ const CreatePostScreen = (props) => {
     <ScrollView style={styles.container}>
       <View style={styles.square}>
 
-      {/* Email Input */}
-      <View style={styles.inputGroup}>
-        <TextInput
-          placeholder="Titulo"
-          multiline={true}
-          numberOfLines={1}
-          onChangeText={(value) => handleChangeText(value, "titulo")}
-          value={state.titulo}
-          maxLength={30}
-        />
-      </View>
+        {/* Email Input */}
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder="Titulo"
+            multiline={true}
+            numberOfLines={1}
+            onChangeText={(value) => handleChangeText(value, "titulo")}
+            value={state.titulo}
+            maxLength={30}
+          />
+        </View>
 
-      {/* Input */}
-      <View style={styles.inputGroup}>
-        <TextInput
-          placeholder="Descripcion"
-          multiline={true}
-          numberOfLines={3}
-          onChangeText={(value) => handleChangeText(value, "descripcion")}
-          value={state.descripcion}
-          maxLength={100}
-        />
-      </View>
+        {/* Input */}
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder="Descripcion"
+            multiline={true}
+            numberOfLines={3}
+            onChangeText={(value) => handleChangeText(value, "descripcion")}
+            value={state.descripcion}
+            maxLength={100}
+          />
+        </View>
 
-      <View style={styles.inputGroup}>
-        <TextInput
-          placeholder="Precio por noche"
-          onChangeText={(value) => handleChangeText(value, "precio")}
-          keyboardType={'numeric'}
-          value={state.precio}
-          maxLength={3}
-        />
-        
-      </View>
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder="Precio por noche"
+            onChangeText={(value) => handleChangeText(value, "precio")}
+            keyboardType={'numeric'}
+            value={state.precio}
+            maxLength={3}
+          />
 
-      <View style={styles.inputGroup}>
-        <TextInput
-          placeholder="Cantidad maxima de personas"
-          onChangeText={(value) => handleChangeText(value, "max_personas")}
-          keyboardType={'numeric'}
-          value={state.max_personas}
-          maxLength={3}
-        />
-        
-      </View>
+        </View>
 
-                {posc !== null && (
-                  <View>
-                    <Text>{posc.latitude}</Text>
-                    <Text>{posc.longitude}</Text>
-                    </View>
-            )}
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder="Cantidad maxima de personas"
+            onChangeText={(value) => handleChangeText(value, "max_personas")}
+            keyboardType={'numeric'}
+            value={state.max_personas}
+            maxLength={3}
+          />
+
+        </View>
+
+        {posc !== null && (
+          <View>
+            <Text>{posc.latitude}</Text>
+            <Text>{posc.longitude}</Text>
+          </View>
+        )}
 
 
-      
-      <TouchableOpacity 
-      onPress={() => {goToMap()}}
-      onLongPress={()=>{console.log("pressed")}}
-    >
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_GOOGLE}
-          style={styles.mapStyle}
-          showsUserLocation={true}
-          initialRegion={{
-            latitude: position.latitude,
-            longitude: position.longitude,
-            latitudeDelta: 0.0100,
-            longitudeDelta: 0.0100,
-          }}>
 
-          
+        <TouchableOpacity
+          onPress={() => { goToMap() }}
+          onLongPress={() => { console.log("pressed") }}
+        >
+          <MapView
+            ref={mapRef}
+            provider={PROVIDER_GOOGLE}
+            style={styles.mapStyle}
+            showsUserLocation={true}
+            initialRegion={{
+              latitude: position.latitude,
+              longitude: position.longitude,
+              latitudeDelta: 0.0100,
+              longitudeDelta: 0.0100,
+            }}>
 
-              <Marker coordinate={{
-                latitude: position.latitude,
-              }}/>
-            
-            
 
-        
 
-          
-        </MapView>
+            <Marker coordinate={{
+              latitude: position.latitude,
+            }} />
+
+
+
+
+
+
+          </MapView>
         </TouchableOpacity>
 
 
-      <Text styles={styles.par}>Fecha de inicio:  {printd1}</Text>
-      
+        <Text styles={styles.par}>Fecha de inicio:  {printd1}</Text>
 
-      {date1Picker && (
+
+        {date1Picker && (
           <DateTimePicker
             value={date1}
             mode={'date'}
@@ -362,16 +420,30 @@ const CreatePostScreen = (props) => {
           </View>
         )}
 
-     
-              <TouchableOpacity style={styles.button2} onPress={() => saveNewPost()}>
-                <Text style={styles.buttontext2} >Publicar</Text>
-              </TouchableOpacity>
+        <TouchableOpacity style={styles.button2} onPress={() => handleImageUpload()}>
+          <Text style={styles.buttontext2} >Subir imagenes</Text>
+        </TouchableOpacity>
+
+        <PostCard
+                heading={''}
+                images={images.map(item => item.uri)}
+                subheading={''}
+                onPress={() =>{
+                  }
+                }
+                home={false}
+              />
+
+          
+        <TouchableOpacity style={styles.button2} onPress={() => saveNewPost()}>
+          <Text style={styles.buttontext2} >Publicar</Text>
+        </TouchableOpacity>
 
 
-            </View>
-          </ScrollView>
-        );
-      };
+      </View>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -387,12 +459,12 @@ const styles = StyleSheet.create({
     height: '2%',
     backgroundColor: '#ffffff',
   },
-  
+
   square: {
     width: '88%',
     marginTop: '3%',
     marginHorizontal: '6%',
-    backgroundColor:  '#5cc3ff',
+    backgroundColor: '#5cc3ff',
     paddingHorizontal: '5%',
     paddingTop: '7%',
     paddingBottom: '5%',

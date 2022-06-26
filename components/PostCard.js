@@ -18,6 +18,7 @@ export default function PostCard({
   favorite,
   onPress,
   style,
+  home,
   ...rest
 }) {
   const flatListRef = (useRef < FlatList) | (null > null);
@@ -69,10 +70,13 @@ export default function PostCard({
         </View>
       )}
 
-      <Pressable onPress={onPress} style={styles.textContainer}>
-        <Text style={styles.heading}>{heading}</Text>
-        <Text style={styles.subheading}>${subheading}/night</Text>
-      </Pressable>
+              {home && (
+                <Pressable onPress={onPress} style={styles.textContainer}>
+                <Text style={styles.heading}>{heading}</Text>
+                <Text style={styles.subheading}>${subheading}/night</Text>
+                </Pressable>
+              )}
+     
     </View>
   );
 }

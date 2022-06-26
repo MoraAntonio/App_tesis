@@ -21,12 +21,23 @@ import expo.modules.ReactNativeHostWrapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.imagepicker.ImagePickerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHostWrapper(
     this,
     new ReactNativeHost(this) {
     @Override
+
+  protected List<ReactPackage> getPackages() {
+        return Arrays.<ReactPackage>asList(
+            new MainReactPackage(),
+            new ImagePickerPackage() // <-- add this line
+            // OR if you want to customize dialog style
+            new ImagePickerPackage(R.style.my_dialog_style)
+        );
+    }
+
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
