@@ -72,11 +72,11 @@ const StripeApp = props => {
           type: "Card",
           billingDetails: billingDetails,
         });
-        saveCheck();
+        
         if (error) {
           alert(`Payment Confirmation Error ${error.message}`);
         } else if (paymentIntent) {
-          
+          saveCheck();
           alert("Payment Successful");
           console.log("Payment successful ");
         

@@ -32,27 +32,33 @@ const UserPosts = (props) => {
             });
           });
           setPosts(posts);
-          
         });
       }
-    
-    
+      useEffect(() => {
+        if (userid && posts.length > 0) {
+          searchFilterFunction(userid)
+        }
+      }, [posts, userid])
     
       useEffect(() => {
         getPosts();
-        searchFilterFunction(userid);
       }, []);
     
       const searchFilterFunction = (userid) => {
         //Validacion si la barra de busqueda no esta en blanco
         if (userid) {
-          const newData = posts.filter(function (item) {
-            // Aplicar filtro con el texto en la barra de busqueda
-            const itemData = item.id_arrendador
-            const textData = userid;
-            return itemData.indexOf(textData) > -1;
-          });
-          setFilteredDataSource(newData);
+          console.log("-----------------------")
+          console.log(posts.length)
+          console.log({userid, posts:posts.map(p=>p.id_arrendador)});
+          const _newData = posts.filter((item ) => item.id_arrendador?.toLowerCase() === userid.toLowerCase())
+          console.log("MIS ARRIENDOS", _newData.length)
+          // const newData = posts.filter(function (item) {
+          //   // Aplicar filtro con el texto en la barra de busqueda
+          //   const itemData = item.id_arrendador
+          //   const textData = userid;
+          //   return itemData.indexOf(textData) > -1;
+          // });
+          setFilteredDataSource(_newData);
           setSearch(userid);
         } else {
           //crear cartas para todas las publicaciones
@@ -64,8 +70,7 @@ const UserPosts = (props) => {
 
   return (
     <ScrollView>
-      
-      {posts.map((post) => {
+      {filteredDataSource.map((post) => {
         return (
           <ListItem
             key={post.id}
@@ -76,14 +81,11 @@ const UserPosts = (props) => {
                 })
             }}
           >
-            
             <ListItem.Chevron />
-            
             <ListItem.Content>
               <ListItem.Title>{post.titulo}</ListItem.Title>
               <ListItem.Subtitle>{post.precio}</ListItem.Subtitle>
             </ListItem.Content>
-            
           </ListItem>
         );
       })}
