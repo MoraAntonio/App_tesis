@@ -4,24 +4,25 @@ import {auth} from '@react-native-firebase/auth';
 import firebase from "firebase/compat";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
+import { useUserContext } from "../context/userContext";
 
 
 
 export default function UserDetails ({route, navigation}) {
 
-  const [user, setUser] = useState('');
+  const {user} = useUserContext();
+  // const [user, setUser] = useState('');
 
-  const getUser = () => {
+  // const getUser = () => {
     
-    const auth = getAuth();
-    const cuser = auth.currentUser;
-    setUser(cuser);
-  }
+  //   const auth = getAuth();
+  //   const cuser = auth.currentUser;
+  //   setUser(cuser);
+  // }
 
 
   const calluser = () => {
     navigation.navigate('UpdateUser');
-    console.log(user)
   }
 
   const signOutUser = async () => {
@@ -32,9 +33,7 @@ export default function UserDetails ({route, navigation}) {
         console.log(e);
     }
   }
-  useEffect(() => {
-    getUser();
-  }, []);
+
 
 
   return (

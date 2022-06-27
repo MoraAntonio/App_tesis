@@ -39,7 +39,6 @@ const SearchHome = ({ route, navigation }) => {
       });
       setPosts(posts);
 
-      console.log(posts[0]);
     });
   };
 

@@ -9,6 +9,7 @@ import CreatePostScreen from "../screens/createPost";
 import CheckInScreen from "../screens/CheckInScreen";
 import UpdatePostScreen from "../screens/UpdatePost";
 import GetMap from "../screens/Getmap";
+import SeeMap from "../screens/SeeMap";
 import CheckIn2 from "../screens/CheckIn2";
 import PayScreen from "../screens/PayScreen";
 import StripeApp from "../screens/StripeApp";
@@ -22,6 +23,7 @@ import WhiteSpace from "../screens/UserWhiteSpace";
 
 //Rama de reservaciones
 import BookIndex from "../screens/BookIndex";
+import BookDetails from "../screens/BookDetails";
 
 //Rama de publicaciones del usuario actual
 import UserPosts from "../screens/userPosts";
@@ -46,6 +48,7 @@ const SearchStackNavigator = () => {
       <Stack.Screen name="Reservar" component={CheckInScreen} />
       <Stack.Screen name="Editar" component={UpdatePostScreen} />
       <Stack.Screen name="Crear Ubicacion" component={GetMap} />
+      <Stack.Screen name="Ver Ubicacion" component={SeeMap} />
       <Stack.Screen name="Confirmar pago" component={CheckIn2} />
       <Stack.Screen name="Detalles de pago" component={PayScreen} />
       <Stack.Screen name="StripeApp" component={StripeApp} />
@@ -59,6 +62,10 @@ const BookStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Mis Reservaciones" component={BookIndex} />
+      <Stack.Screen name="Detalles de Reservacion" component={BookDetails} />
+      <Stack.Screen name="Ver Ubicacion" component={SeeMap} />
+      <Stack.Screen name="Detalles" component={PostDetails} />
+
     </Stack.Navigator>
   );
 }

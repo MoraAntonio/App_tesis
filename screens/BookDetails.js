@@ -31,13 +31,26 @@ import { AuthErrorCodes, getAdditionalUserInfo, getAuth } from "firebase/auth";
 
 //custom components
 import ItemDivider from "../components/ItemDivider";
+import { getTsBuildInfoEmitOutputFilePath } from "typescript";
 
 
 
-const PostDetails = (props) => {
+const BookDetails = (props) => {
 
   //estado inicial
   const initialState = {
+    cantidad_personas: '',
+    estado_pago: '',
+    fecha_creacion: '',
+    fecha_fin: '',
+    fecha_inicio: '',
+    _id_huesped: '',
+    id_publicacion: '',
+    nombre_huesped: '',
+    total: '',
+  };
+
+  const initialState2 = {
     titulo: '',
     descripcion: '',
     precio: '',
@@ -46,22 +59,25 @@ const PostDetails = (props) => {
     fecha_publicacion: '',
     id_arrendador: '',
     nombre_arrendador: '',
-    id_chat: '',
     ubicacion: '',
   };
 
   
-  const [post, setPost] = useState(initialState);
+  const [book, setBook] = useState(initialState);
+  const [post, setPost] = useState(initialState2);
   const [user, setUser] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const finicio = book.fecha_inicio;
+  const ffinal  = book.fecha_fin;
+
+  const finicio2 = new Date(finicio.seconds*1000);
+  const ffinal2  = new Date(ffinal.seconds*1000);
+
+  const printd1 = finicio2.getDate() + '-' + (finicio2.getMonth()+1) + '-' + finicio2.getFullYear();
+  const printd2 = ffinal2.getDate() + '-' + (ffinal2.getMonth()+1) + '-' + ffinal2.getFullYear();
+
   //obtener usuario
-  const getUser = () => {
-    
-    const auth = getAuth();
-    const cuser = auth.currentUser;
-    setUser(cuser);
-  }
 
   //funciones del mapa
 
@@ -77,89 +93,74 @@ const PostDetails = (props) => {
 
 
   //obtener datos de la publicacion actual
+  const getBookById = async (id) => {
+    const dbRef = firebase.db.collection("reservaciones").doc(id);
+    const doc = await dbRef.get();
+    const book = doc.data();
+    setBook({ ...book, id: doc.id });
+    console.log(book);
+    getPostById(book.id_publicacion);
+  };
+
   const getPostById = async (id) => {
     const dbRef = firebase.db.collection("publicaciones").doc(id);
     const doc = await dbRef.get();
     const post = doc.data();
     setPost({ ...post, id: doc.id });
-    console.log(post?.ubicacion);
   };
 
-  const finicio = post.fecha_inicio;
-  const ffinal  = post.fecha_fin;
-  const fpublic = post.fecha_publicacion;
-
-  const finicio2 = new Date(finicio.seconds*1000);
-  const ffinal2  = new Date(ffinal.seconds*1000);
-  const fpublic2 = new Date(fpublic.seconds*1000);
-
-  const printd1 = finicio2.getDate() + '-' + (finicio2.getMonth()+1) + '-' + finicio2.getFullYear();
-  const printd2 = ffinal2.getDate() + '-' + (ffinal2.getMonth()+1) + '-' + ffinal2.getFullYear();
-  const printd3 = fpublic2.getDate() + '-' + (fpublic2.getMonth()+1) + '-' + fpublic2.getFullYear();
 
   //cargar al iniciar
   useEffect(() => {
-    getUser();
-    getPostById(props.route.params.postId);
-  }, []);
+    getBookById(props.route.params.bookId);
 
+  }, [props.route.params.bookId]);
 
     return (
       <ScrollView style={styles.container}>
         <View style={styles.square}>
-          <Text style={styles.title}>{post.titulo}</Text>
 
-          <Text style={styles.desc}>Descripcion</Text>
-          <ItemDivider/>
-          <Text style={styles.desc2}>{post.descripcion}</Text>
-          <ItemDivider/>
-          <Text style={styles.par}>Precio/noche: {post.precio}$</Text>
-          <Text style={styles.par}>Fecha inicio: {printd1}</Text>
-          <Text style={styles.par}>Fecha de cierre: {printd2}</Text>
-          <Text style={styles.par}>Fecha de publicacion: {printd3}</Text>
-          <Text style={styles.par}>Arrendador: {post.nombre_arrendador}</Text>
-          <Text>Envia un mensaje: </Text>
-          <Ionicons name={'logo-whatsapp'} size={20} color={'green'}>
-          <Text style={{color: '#000'}}>numero</Text>
-          </Ionicons>
-          
-          <Ionicons name={'logo-instagram'} size={20} color={'black'}/>
+          <Text style={styles.par}></Text>
 
-          <TouchableOpacity
-        >
-          <MapView
-            ref={mapRef}
-            provider={PROVIDER_GOOGLE}
-            style={styles.mapStyle}
-            showsUserLocation={true}
-            onPress={() => {props.navigation.navigate('Ver Ubicacion', {
-              dposition: post.ubicacion,
-            })}}
-            region={{
-              latitude: post?.ubicacion.latitude,
-              longitude: post?.ubicacion.longitude,
-              latitudeDelta: 0.0100,
-              longitudeDelta: 0.0100,
-            }}>
-              {post.ubicacion !== '' && (
-
-                <Marker coordinate={{
+          {post.ubicacion !== '' && (
+            <TouchableOpacity
+            >
+              <MapView
+                ref={mapRef}
+                provider={PROVIDER_GOOGLE}
+                style={styles.mapStyle}
+                showsUserLocation={true}
+                onPress={() => {props.navigation.navigate('Ver Ubicacion', {
+                  dposition: post.ubicacion,
+                })}}
+                region={{
                   latitude: post?.ubicacion.latitude,
                   longitude: post?.ubicacion.longitude,
-                }} />
+                  latitudeDelta: 0.0100,
+                  longitudeDelta: 0.0100,
+                }}>
+                  {post.ubicacion !== '' && (
+    
+                    <Marker coordinate={{
+                      latitude: post?.ubicacion.latitude,
+                      longitude: post?.ubicacion.longitude,
+                    }} />
+    
+                  )
+    
+                  }
+                
+    
+              </MapView>
+            </TouchableOpacity>
+          )}
 
-              )
+        
 
-              }
-            
-
-          </MapView>
-        </TouchableOpacity>
-
-              <TouchableOpacity style={styles.button} onPress={() => {props.navigation.navigate('Editar', {
+              <TouchableOpacity style={styles.button} onPress={() => {props.navigation.navigate('Detalles', {
               postId: post.id 
             })}}>
-              <Text style={styles.buttontxt} >Editar</Text>
+              <Text style={styles.buttontxt} >Ir a Publicacion</Text>
               </TouchableOpacity>
           
         </View>
@@ -243,4 +244,4 @@ par: {
 
 });
 
-export default PostDetails;
+export default BookDetails;

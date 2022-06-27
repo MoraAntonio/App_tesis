@@ -59,6 +59,7 @@
     "react-native-location": "^2.5.0",
     "react-native-map-input": "^0.3.1",
     "react-native-maps": "0.30.2",
+    "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "^2.8.0",
     "react-native-safe-area-context": "4.2.4",
     "react-native-scroll-bottom-sheet": "^0.7.0",

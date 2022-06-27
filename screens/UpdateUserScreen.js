@@ -1,67 +1,112 @@
-import React from "react";
-import { View, StyleSheet, Text, SafeAreaView, TextInput, ScrollView, Button } from "react-native";
-import { getAuth } from "firebase/auth";
+
+import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  Button,
+  View,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { TextInput } from "react-native-gesture-handler";
+
+import {firebase, auth} from "../database/firebase";
+import { getAuth, updateProfile } from "firebase/auth";
+import { useUserContext } from "../context/userContext";
+
 
 const UpdateUserScreen = (props) => {
+  const {user, getUser,setUser} = useUserContext();
 
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const [loading, setLoading] = useState(true);
 
-  const updateUser = async () => {
-    const userRef = firebase.db.collection("users").doc(user.id);
-    await userRef.set({
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-    });
-    setUser(initialState);
-    props.navigation.navigate("UsersList");
+  const handleTextChange = (value, prop) => {
+    setUser({ ...user, [prop]: value });
   };
 
+  const updateUser = async () => {
+    // const update = {
+    //   displayName: user.displayName,
+    //   email: user.email
+    // };
+    // await  auth().currentUser.updateProfile(update);
+    const auth = getAuth();
+      updateProfile(auth.currentUser, {
+        displayName: user.displayName,
+      }).then(() => {
+        // Profile updated!
+        // ...
+        console.log('update successful')
+        Alert.alert('Usuario actualizado!')
+        getUser();
+      }).catch((error) => {
+        // An error occurred
+        console.log(error);
+        // ...
+      });
+  }
+
+
+
+
+  console.log(user)
+  // if (loading) {
+  //   return (
+  //     <View style={styles.loader}>
+  //       <ActivityIndicator size="large" color="#9E9E9E" />
+  //     </View>
+  //   );
+  // }
 
   return (
     <ScrollView style={styles.container}>
-    <View>
-      <TextInput
-        placeholder="Name"
-        autoCompleteType="username"
-        style={styles.input}
-        value={user.name}
-        onChangeText={(value) => handleTextChange(value, "name")}
-      />
-    </View>
-    <View>
-      <TextInput
-        autoCompleteType="email"
-        placeholder="Email"
-        style={styles.input}
-        value={user.email}
-        onChangeText={(value) => handleTextChange(value, "email")}
-      />
-    </View>
+      <View>
+        <TextInput
+          placeholder="Name"
+          style={styles.inputGroup}
+          value={user?.displayName}
+          onChangeText={(value) => handleTextChange(value, "displayName")}
+        />
+      </View>
+      <View>
+        <TextInput
+          placeholder="Email"
+          style={styles.inputGroup}
+          value={user?.email}
+          onChangeText={(value) => handleTextChange(value, "email")}
+        />
+      </View>
 
-
-      <Button title="Update" onPress={() => updateUser()} color="#19AC52" />
-  </ScrollView>
+      <View>
+        <Button title="Update" onPress={() => updateUser()} color="#19AC52" />
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  center: {
+  container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-    resizeMode: 'cover',
+    padding: 35,
   },
-  input: {
-    borderWidth: 1,
-    width: "80%",
-    height: "40%",
-    marginBottom: "5%",
-    backgroundColor: '#eeeeee',
-    paddingLeft: 5,
-    borderRadius: 8,
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputGroup: {
+    flex: 1,
+    padding: 0,
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#cccccc",
+  },
+  btn: {
+    marginBottom: 7,
   },
 });
 

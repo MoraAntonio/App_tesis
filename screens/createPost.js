@@ -16,7 +16,7 @@ import firebase from "../database/firebase";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import storage from '@react-native-firebase/storage';
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useMap } from "../functions/usemap";
 import PostCard from "../components/PostCard";
 
@@ -25,7 +25,6 @@ import { getAuth } from "firebase/auth";
 import * as TaskManager from "expo-task-manager"
 import * as Location from "expo-location"
 import * as ImagePicker from 'expo-image-picker';
-import { Marker } from "react-native-svg";
 import { Camera } from 'expo-camera';
 
 
@@ -158,16 +157,12 @@ const CreatePostScreen = (props) => {
     handelResetInitialPosition,
   } = useMap();
 
-
-
-
-
   const [state, setState] = useState(initalState);
   const [date1Picker, setDate1Picker] = useState(false);
   const [date2Picker, setDate2Picker] = useState(false);
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
-  const [position, setPosition] = useState({})
+  const [position, setPosition] = useState(null)
   const [marker, setMarker] = useState(null);
 
 
@@ -338,6 +333,17 @@ const CreatePostScreen = (props) => {
 
         </View>
 
+        <View style={styles.inputGroup}>
+          <TextInput
+            placeholder="Contacto Whatsapp"
+            onChangeText={(value) => handleChangeText(value, "max_personas")}
+            keyboardType={'numeric'}
+            value={state.max_personas}
+            maxLength={3}
+          />
+
+        </View>
+
         {posc !== null && (
           <View>
             <Text>{posc.latitude}</Text>
@@ -347,35 +353,38 @@ const CreatePostScreen = (props) => {
 
 
 
-        <TouchableOpacity
-          onPress={() => { goToMap() }}
-          onLongPress={() => { console.log("pressed") }}
-        >
-          <MapView
-            ref={mapRef}
-            provider={PROVIDER_GOOGLE}
-            style={styles.mapStyle}
-            showsUserLocation={true}
-            initialRegion={{
-              latitude: position.latitude,
-              longitude: position.longitude,
-              latitudeDelta: 0.0100,
-              longitudeDelta: 0.0100,
-            }}>
+          {position && (
+            
+            <TouchableOpacity
+            onPress={() => { goToMap() }}
+            onLongPress={() => { console.log("pressed"), {
+              platitude: position.latitude,
+              plongitude: position.longitude,
+            } }}
+          >
+            <MapView
+              ref={mapRef}
+              provider={PROVIDER_GOOGLE}
+              style={styles.mapStyle}
+              showsUserLocation={true}
+              region={{
+                latitude: posc?.latitude ? posc.latitude : position.latitude,
+                longitude: posc?.longitude ? posc.longitude : position.longitude,
+                latitudeDelta: 0.0100,
+                longitudeDelta: 0.0100,
+              }}>
 
+                <Marker coordinate={{
+                  latitude: posc?.latitude ? posc.latitude : position.latitude,
+                  longitude:  posc?.longitude ? posc.longitude :position.longitude,
+                }} />
+  
+  
+  
+            </MapView>
+          </TouchableOpacity>
+          )}
 
-
-            <Marker coordinate={{
-              latitude: position.latitude,
-            }} />
-
-
-
-
-
-
-          </MapView>
-        </TouchableOpacity>
 
 
         <Text styles={styles.par}>Fecha de inicio:  {printd1}</Text>

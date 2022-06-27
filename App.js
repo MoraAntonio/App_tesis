@@ -6,6 +6,7 @@ import 'react-native-gesture-handler';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import StripeApp from "./screens/StripeApp";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import { UserProvider } from "./context/userContext";
 
  const App = () => {
 
@@ -18,12 +19,17 @@ import { StripeProvider } from "@stripe/stripe-react-native";
     }
     merchantIdentifier="merchant.identifier"
     >
+    <UserProvider>
 
           
-     <NavigationContainer>
+    <NavigationContainer>
      <BottomTabNavigator />
      </NavigationContainer>
     
+
+    </UserProvider>
+
+
     </StripeProvider>
 
   );

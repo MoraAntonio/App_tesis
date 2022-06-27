@@ -29,7 +29,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   }
 })
 
-export default function GetMap(props) {
+export default function SeeMap(props) {
   // Define position state: {latitude: number, longitude: number}
   const [position, setPosition] = useState({})
   const [marker, setMarker] = useState(null);
@@ -40,53 +40,10 @@ export default function GetMap(props) {
 
   // Request permissions right after starting the app
   useEffect(() => {
-
-    startForegroundUpdate()
+    setPosition(props.route.params.dposition)
     
   }, [])
 
-  const requestPermissions = async () => {
-    const foreground = await Location.requestForegroundPermissionsAsync()
-    if (foreground.granted) await Location.requestBackgroundPermissionsAsync()
-  }
-
-  // Start location tracking in foreground
-  const startForegroundUpdate = async () => {
-    requestPermissions()
-    // Check if foreground permission is granted
-    const { granted } = await Location.getForegroundPermissionsAsync()
-    if (!granted) {
-      console.log("location tracking denied")
-      return
-    }
-
-    // Make sure that foreground location tracking is not running
-    foregroundSubscription?.remove()
-
-    // Start watching position in real-time
-    foregroundSubscription = await Location.watchPositionAsync(
-      {
-        // For better logs, we set the accuracy to the most sensitive option
-        accuracy: Location.Accuracy.BestForNavigation,
-      },
-      location => {
-        setPosition(location.coords)
-      }
-    )
-  }
-
-  // Stop location tracking in foreground
-  const stopForegroundUpdate = () => {
-    foregroundSubscription?.remove()
-    setPosition(null)
-  }
-
-  const goBackWithLocation = () => {
-    stopForegroundUpdate();
-    props.navigation.navigate('Crear Publicacion', {
-    sharep: marker,
-    })
-  }
 
   return (
     <View style={styles.container}>
@@ -103,18 +60,14 @@ export default function GetMap(props) {
           longitude: position?.longitude,
           latitudeDelta: 0.0100,
           longitudeDelta: 0.0100,
-        }}
-        onPress={ e => {
-          setMarker(e.nativeEvent.coordinate)
-          console.log(marker)
-        }
-      }>
-        {marker !== null && (
-          <Marker coordinate={marker}/> 
-        )}
+        }}>
+          <Marker coordinate={{
+            latitude: position?.latitude,
+           longitude: position?.longitude,
+          }}/> 
         
       </MapView>
-      <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation()}>
+      <TouchableOpacity style={styles.button} onPress={() => props.navigation.goBack()}>
          <Text style={styles.buttontext} >Publicar</Text>
       </TouchableOpacity>
       
