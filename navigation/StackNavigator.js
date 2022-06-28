@@ -62,8 +62,8 @@ const SearchStackNavigator = () => {
 const BookStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Mis Reservaciones" component={BookIndex} />
-      <Stack.Screen name="Detalles de Reservacion" component={BookDetails} />
+      <Stack.Screen name="BookIndex" component={BookIndex} />
+      <Stack.Screen name="BookDetails" component={BookDetails} />
       <Stack.Screen name="Ver Ubicacion" component={SeeMap} />
       <Stack.Screen name="Detalles" component={PostDetails} />
 
@@ -74,7 +74,7 @@ const BookStackNavigator = () => {
 const UserPostStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
-      <Stack.Screen name="Mis Publicaciones" component={UserPosts} />
+      <Stack.Screen name="UserPosts" component={UserPosts} />
       <Stack.Screen name="Detalles" component={PostDetails} />
       <Stack.Screen name="Ver Ubicacion" component={SeeMap} />
       <Stack.Screen name="Editar" component={UpdatePostScreen} />

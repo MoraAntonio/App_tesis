@@ -79,8 +79,8 @@ const StripeApp = props => {
           alert(`Payment Confirmation Error ${error.message}`);
         } else if (paymentIntent) {
           saveCheck();
-          alert("Payment Successful");
-          console.log("Payment successful ");
+          alert("Pago exisoto!");
+          console.log("Pago exitoso!");
         
         }
       }

@@ -45,7 +45,7 @@ const UpdatePostScreen = (props) => {
     const doc = await dbRef.get();
     const post = doc.data();
     setPost({ ...post, id: doc.id });
-    
+    setState(post);
     console.log(posc)
     setLoading(false);
     
@@ -61,6 +61,7 @@ const UpdatePostScreen = (props) => {
 
   useEffect(() => {
     getPostById(props.route.params.postId);
+    
   }, []);
 
   useEffect(() => {

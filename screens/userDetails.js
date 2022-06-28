@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from "react-native";
 import firebase from "firebase/compat";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import { getAdditionalUserInfo } from "firebase/auth";
 export default function UserDetails ({route, navigation}) {
 
   const {user, setUser, getUser} = useUserContext();
+  const [loading, setLoading] = useState(true)
   // const [user, setUser] = useState('');
 
   // const getUser = () => {
@@ -37,6 +38,9 @@ export default function UserDetails ({route, navigation}) {
   useEffect(() => {
     getUser();
     console.log(user)
+    if (user){
+      setLoading(false);
+    }
   }, [])
 
 
@@ -88,18 +92,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: 'white',
     width: '58%',
-    height: '15%',
+    height: '10%',
     marginHorizontal: '21%',
-    paddingTop: '5%',
+    paddingTop: '2%',
     borderRadius: 10,
   },
   button2: {
-    marginTop: 20,
+    marginTop: 10,
     backgroundColor: 'white',
     width: '58%',
-    height: '15%',
+    height: '10%',
     marginHorizontal: '21%',
-    paddingTop: '5%',
+    paddingTop: '2%',
     borderRadius: 10,
     marginBottom: '50%'
   },

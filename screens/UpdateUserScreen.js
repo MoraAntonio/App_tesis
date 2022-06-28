@@ -38,6 +38,7 @@ const UpdateUserScreen = (props) => {
         console.log('update successful')
         Alert.alert('Usuario actualizado!')
         getUser();
+        props.navigation.goBack();
       }).catch((error) => {
         // An error occurred
         console.log(error);
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 35,
+    backgroundColor: '#e6e6e6',
   },
   loader: {
     left: 0,
@@ -86,11 +88,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   inputGroup: {
-    flex: 1,
-    padding: 0,
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    width: "100%",
+    height: 50,
+    marginBottom: "5%",
+    marginTop: "1%",
+    backgroundColor: "#FFFFFF",
+    paddingLeft: 10,
+    borderRadius: 8,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   btn: {
     marginBottom: 7,

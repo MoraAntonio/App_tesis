@@ -134,6 +134,7 @@ const CreatePostScreen = (props) => {
     fecha_fin: "",
     fecha_publicacion: "",
     max_personas: "",
+    contacto: ""
   };
 
   const {
@@ -217,7 +218,12 @@ const [camera, setCamera] = useState(null);
       Alert.alert(
         "La ubicacion debe encontrarse dentro del territorio venezolano"
       );
-    } else {
+    } else if (images.length == 0) {
+      Alert.alert(
+        "Debe subir al menos una imagen"
+      );
+    }
+      else {
       console.log(posc.latitude + "," + posc.longitude);
 
       console.log(b64Images.length);
@@ -234,6 +240,7 @@ const [camera, setCamera] = useState(null);
           ubicacion: posc,
           max_personas: state.max_personas,
           images: b64Images,
+          contacto: state.contacto,
         });
         Alert.alert("Publicacion creada!");
       } catch (error) {
@@ -244,7 +251,9 @@ const [camera, setCamera] = useState(null);
 
   const goToMap = () => {
     stopForegroundUpdate();
-    props.navigation.navigate("Crear Ubicacion");
+    props.navigation.navigate("Crear Ubicacion", {
+      edit: 0,
+    });
   };
 
   const getPlaceName = async (lat, lng) => {
@@ -341,20 +350,15 @@ const [camera, setCamera] = useState(null);
         <View style={styles.inputGroup}>
           <TextInput
             placeholder="Contacto Whatsapp"
-            onChangeText={(value) => handleChangeText(value, "max_personas")}
+            onChangeText={(value) => handleChangeText(value, "contacto")}
             keyboardType={"numeric"}
-            value={state.max_personas}
-            maxLength={3}
+            value={state.contacto}
+            maxLength={11}
             style={styles.input}
           />
         </View>
 
-        {posc !== null && (
-          <View>
-            <Text>{posc.latitude}</Text>
-            <Text>{posc.longitude}</Text>
-          </View>
-        )}
+
 
         {position && (
           <TouchableOpacity
@@ -394,8 +398,6 @@ const [camera, setCamera] = useState(null);
             </MapView>
           </TouchableOpacity>
         )}
-        <Text>Estado: {direccion?.estado || "No Definido"}</Text>
-        <Text>Ciudad: {direccion?.ciudad || "No Definido"}</Text>
 
         <View style={{ display: "flex", flexDirection: "row", padding: 0 }}>
           <View

@@ -33,6 +33,8 @@ const UserPosts = (props) => {
           });
           setPosts(posts);
         });
+        
+        setLoading(false);
       }
       useEffect(() => {
         getUser();
@@ -45,7 +47,8 @@ const UserPosts = (props) => {
         if (userid) {
         getPosts();
         } else {
-          setLoading(false)
+          
+        setLoading(false);
         }
       }, [userid]);
     
@@ -83,15 +86,15 @@ const UserPosts = (props) => {
 
         } else if (!userid) {
           return(
-            <View>
-              <Text> no hay usuario </Text>
+            <View style={styles.center}>
+             <Text style={{fontSize: 15, color: 'red'}}> Inicie sesion para ver sus publicaciones </Text>
             </View>
           )
         } 
         else if (posts.length < 1) {
           return(
-            <View>
-              <Text> no has hecho publicaciones pedazo de imbecil </Text>
+            <View style={styles.center}>
+              
             </View>
           )
         }
@@ -134,6 +137,7 @@ const UserPosts = (props) => {
 export default UserPosts;
 
 const styles = StyleSheet.create({
+
   loader: {
     left: 0,
     right: 0,
@@ -146,6 +150,12 @@ const styles = StyleSheet.create({
   listview: {
     flex: 1,
     flexDirection: 'row',
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
   },
   listview2: {
     flex: 1,

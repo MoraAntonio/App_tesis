@@ -123,13 +123,13 @@ export default function GetMap(props) {
         
       </MapView>
 
-      {props.route.params.edit && (
+      {props.route.params.edit == 1 && (
         <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation2()}>
           <Text style={styles.buttontext} >Guardar</Text>
         </TouchableOpacity>
       )}
 
-      {!props.route.params.edit && (
+      {props.route.params.edit !== 1 && (
         <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation()}>
           <Text style={styles.buttontext} >Guardar</Text>
         </TouchableOpacity>

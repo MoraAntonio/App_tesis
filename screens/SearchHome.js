@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
-  Image
+  Image,
 } from "react-native";
 import PostCard from "../components/PostCard";
 const FAKE_IMAGES = [
@@ -99,8 +99,8 @@ const SearchHome = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.main}>
-      <Image style={styles.image} source={{ uri: '../assets/beach-wallpaper' }}/>
       <View className={styles.container}>
+      
         <TextInput
           style={styles.textInputStyle}
           onChangeText={(text) => searchFilterFunction(text)}
@@ -208,6 +208,10 @@ const styles = StyleSheet.create({
     borderColor: "#009688",
     backgroundColor: "#FFFFFF",
     borderRadius: 7,
+  },
+  backimage: {
+    flex: 1,
+    justifyContent: "center"
   },
   Card: {
     width: "80%",

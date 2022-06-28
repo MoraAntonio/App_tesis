@@ -168,7 +168,7 @@ const PostDetails = (props) => {
             <Text style={styles.par}>WhatsApp:</Text>
             <Text style={styles.par}>
               <Ionicons name={"logo-whatsapp"} size={20} color={"green"}>
-                <Text style={{ color: "#000" }}>0000-0000000</Text>
+                <Text style={{ color: "#000" }}>{post.contacto}</Text>
               </Ionicons>
             </Text>
           </View>

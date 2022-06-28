@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import { View, StyleSheet, Text, SafeAreaView, TextInput } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView, TextInput, ActivityIndicator } from "react-native";
 import { useUserContext } from "../context/userContext";
 
 const WhiteSpace = ({navigation}) => {
@@ -8,7 +8,7 @@ const WhiteSpace = ({navigation}) => {
 
     useEffect(() => {
         getUser();
-        if (user) {
+        if (user.uid) {
           navigation.navigate('UserDetails');
         } else {
             navigation.navigate('Login'); 
@@ -17,7 +17,7 @@ const WhiteSpace = ({navigation}) => {
 
   return (
       <View style={styles.center} >
-     
+        <ActivityIndicator size="large" color="#9E9E9E" />
       </View>
 
   

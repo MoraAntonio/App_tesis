@@ -105,7 +105,8 @@ const CheckInScreen = (props) => {
             cdate1: date1,
             cdate2: date2,
             cpers: state.cpers,
-            thumbnail: post.images[0]
+            thumbnail: post.images[0],
+            titulo: post.titulo
           }
 
           props.navigation.navigate('Confirmar pago', {

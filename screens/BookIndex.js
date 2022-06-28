@@ -42,12 +42,16 @@ const BookIndex = (props) => {
         firebase.db.collection("reservaciones").onSnapshot((querySnapshot) => {
           const books = [];
           querySnapshot.docs.forEach((doc) => {
-            const { id_huesped, id_publicacion, thumbnail } = doc.data();
+            const { titulo_p, id_huesped, id_publicacion, thumbnail, fecha_inicio, fecha_final, total } = doc.data();
             books.push({
               id: doc.id,
+              titulo_p,
               id_huesped,
               id_publicacion,
-              thumbnail
+              thumbnail,
+              fecha_inicio,
+              fecha_final,
+              total,
             });
           });
           setBooks(books);
@@ -105,6 +109,8 @@ const BookIndex = (props) => {
         }
       };
 
+   
+
 
   if (loading) {
     return (
@@ -114,8 +120,9 @@ const BookIndex = (props) => {
     );
   } else if (!userid) {
     return(
-      <View>
-        <Text> no hay usuario </Text>
+      <View style={styles.center}>
+        
+        <Text style={{fontSize: 15, color: 'red'}}> Inicie sesion para ver sus reservaciones </Text>
       </View>
     )
   } else {
@@ -130,7 +137,7 @@ const BookIndex = (props) => {
               key={book.id}
               bottomDivider
               onPress={() => {
-                  props.navigation.navigate("Detalles", {
+                  props.navigation.navigate("BookDetails", {
                     bookId: book.id,
                   })
               }}
@@ -139,7 +146,9 @@ const BookIndex = (props) => {
               <ListItem.Content>
               <View style={styles.listview}>
                 <Image  style={styles.image} source={{ uri: `data:image/png;base64,${book?.thumbnail ||  "https://a0.muscache.com/im/pictures/7b0190c7-3af2-4e3b-b3ed-24750a7f0314.jpg?im_w=1200"}` }} />
-                <ListItem.Title style={styles.listview2}>{book.titulo}-{book?.images}</ListItem.Title>
+                <ListItem.Title style={styles.listview2}>{book?.titulo}</ListItem.Title>
+                <ListItem.Title style={styles.listview2}>${book.total}</ListItem.Title>
+                
               </View>
               <View>
               
@@ -171,6 +180,12 @@ const styles = StyleSheet.create({
   listview: {
     flex: 1,
     flexDirection: 'row',
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
   },
   listview2: {
     flex: 1,

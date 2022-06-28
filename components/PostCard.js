@@ -73,7 +73,7 @@ export default function PostCard({
               {home && (
                 <Pressable onPress={onPress} style={styles.textContainer}>
                 <Text style={styles.heading}>{heading}</Text>
-                <Text style={styles.subheading}>${subheading}/night</Text>
+                <Text style={styles.subheading}>${subheading} por noche</Text>
                 </Pressable>
               )}
      
