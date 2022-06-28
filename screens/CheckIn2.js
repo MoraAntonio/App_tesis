@@ -34,6 +34,7 @@ const CheckIn2 = (props) => {
             nombre_huesped: user.displayName,
             id_publicacion: post.id,
             cantidad_personas: '',
+            thumbnail: post.images[0],
         });
         props.navigation.navigate('PDetails', {
           postId: post.id,

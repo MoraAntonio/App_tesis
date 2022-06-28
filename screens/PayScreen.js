@@ -14,6 +14,8 @@ const PayScreen = (props) => {
     date2={props.route.params.checkhold.cdate2}
     days={props.route.params.checkhold.ndays}
     postId={props.route.params.checkhold.postId}
+    thumbnail={props.route.params.checkhold.thumbnail}
+    
     
     style={styles.center}/>
 

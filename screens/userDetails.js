@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from "react-native";
-import {auth} from '@react-native-firebase/auth';
 import firebase from "firebase/compat";
 import { useNavigation } from "@react-navigation/native";
-import { getAuth } from "firebase/auth";
 import { useUserContext } from "../context/userContext";
 
 
 
 export default function UserDetails ({route, navigation}) {
 
-  const {user} = useUserContext();
+  const {user, setUser} = useUserContext();
   // const [user, setUser] = useState('');
 
   // const getUser = () => {
@@ -28,6 +26,7 @@ export default function UserDetails ({route, navigation}) {
   const signOutUser = async () => {
     try {
        firebase.auth().signOut();
+       setUser({});
        navigation.navigate('Login');  
     } catch (e) {
         console.log(e);

@@ -36,6 +36,7 @@ const screenOptionStyle = {
   },
   headerTintColor: "white",
   headerBackTitle: "Back",
+  headerShown: false,
 };
 
 const SearchStackNavigator = () => {
@@ -83,9 +84,7 @@ const UserPostStackNavigator = () => {
 const UserStackNavigator = () => {
 
     return (
-      <Stack.Navigator screenOptions={{
-        headerShown: false
-      }}>
+      <Stack.Navigator screenOptions={screenOptionStyle}>
         <Stack.Screen name="WhiteSpace"  component={WhiteSpace}/>
         <Stack.Screen name="UserDetails" component={UserDetails}/>
         <Stack.Screen name="UpdateUser"  component={UpdateUserScreen} />

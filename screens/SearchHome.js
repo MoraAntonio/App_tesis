@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import firebase from "../database/firebase";
+import { COLORS } from "../values/colors";
 
 // import all the components we are going to use
 import { getAuth } from "firebase/auth";
@@ -12,6 +13,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator
 } from "react-native";
 import PostCard from "../components/PostCard";
 const FAKE_IMAGES = [
@@ -23,6 +25,7 @@ const SearchHome = ({ route, navigation }) => {
   const [search, setSearch] = useState("");
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getPosts = () => {
     firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
@@ -38,7 +41,7 @@ const SearchHome = ({ route, navigation }) => {
         });
       });
       setPosts(posts);
-
+      setLoading(false);
     });
   };
 
@@ -83,6 +86,15 @@ const SearchHome = ({ route, navigation }) => {
   useEffect(() => {
     getPosts();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#9E9E9E" />
+      </View>
+    );
+  }
+  else {
 
   return (
     <SafeAreaView style={styles.main}>
@@ -140,7 +152,7 @@ const SearchHome = ({ route, navigation }) => {
         <Text style={styles.postbuttontext}>+</Text>
       </TouchableOpacity>
     </SafeAreaView>
-  );
+  )};
 };
 const styles = StyleSheet.create({
   main: {
@@ -148,7 +160,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#fff",
   },
   flatlist: {
     height: "100%",
@@ -193,7 +205,6 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   Card: {
-    backgroundColor: "#424242",
     width: "80%",
     alignSelf: "center",
     paddingHorizontal: "10%",

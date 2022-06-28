@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
-import {firebase, auth} from "../database/firebase";
 import { getAuth, updateProfile } from "firebase/auth";
 import { useUserContext } from "../context/userContext";
 
@@ -45,18 +44,6 @@ const UpdateUserScreen = (props) => {
         // ...
       });
   }
-
-
-
-
-  console.log(user)
-  // if (loading) {
-  //   return (
-  //     <View style={styles.loader}>
-  //       <ActivityIndicator size="large" color="#9E9E9E" />
-  //     </View>
-  //   );
-  // }
 
   return (
     <ScrollView style={styles.container}>

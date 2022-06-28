@@ -7,7 +7,8 @@ import axios from 'axios';
 
 
 //ADD localhost address of your server
-const API_URL = "http://192.168.1.107:3000";
+// const API_URL = "http://192.168.1.107:3000";
+const API_URL = "https://stripe-tesis-test.herokuapp.com";
 
 
 const StripeApp = props => {
@@ -34,6 +35,7 @@ const StripeApp = props => {
         id_publicacion: props.postId,
         cantidad_personas: props.pers,
         total: props.amount,
+        thumbnail: props.thumbnail,
         estado_pago: 'aprobado',
     });
     console.log('reservacion creada');

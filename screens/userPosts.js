@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Text, Image } from "react-native";
 import { ListItem, Avatar } from "react-native-elements";
 import { ScrollView } from "react-native-gesture-handler";
 
 import firebase from "../database/firebase";
-import { getAuth } from "firebase/auth";
-import { TouchableOpacity } from "react-native-web";
+import { useUserContext } from "../context/userContext";
 
 
 const UserPosts = (props) => {
 
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const userid = user.uid;
+  const {user} = useUserContext();
+  const userid = user.uid;
 
     const [search, setSearch] = useState('');
     const [filteredDataSource, setFilteredDataSource] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
   
     const getPosts = () => {
         firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
           const posts = [];
           querySnapshot.docs.forEach((doc) => {
-            const { titulo, precio, descripcion, id_arrendador } = doc.data();
+            const { titulo, precio, descripcion, id_arrendador, images } = doc.data();
             posts.push({
               id: doc.id,
               titulo,
               precio,
               descripcion,  
               id_arrendador,
+              images,
             });
           });
           setPosts(posts);
@@ -41,8 +41,12 @@ const UserPosts = (props) => {
       }, [posts, userid])
     
       useEffect(() => {
+        if (userid) {
         getPosts();
-      }, []);
+        } else {
+          setLoading(false)
+        }
+      }, [userid]);
     
       const searchFilterFunction = (userid) => {
         //Validacion si la barra de busqueda no esta en blanco
@@ -66,7 +70,23 @@ const UserPosts = (props) => {
           setFilteredDataSource(posts);
           setSearch(id_arrendador);
         }
+        setLoading(false);
       };
+
+      if (loading) {
+        return (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color="#9E9E9E" />
+          </View>
+        );
+
+        } else if (!userid) {
+          return(
+            <View>
+              <Text> no hay usuario </Text>
+            </View>
+          )
+        } else {
 
   return (
     <ScrollView>
@@ -83,14 +103,48 @@ const UserPosts = (props) => {
           >
             <ListItem.Chevron />
             <ListItem.Content>
-              <ListItem.Title>{post.titulo}</ListItem.Title>
-              <ListItem.Subtitle>{post.precio}</ListItem.Subtitle>
+            <View style={styles.listview}>
+              <Image  style={styles.image} source={{ uri: `data:image/png;base64,${post?.images?.[0] ||  "https://a0.muscache.com/im/pictures/7b0190c7-3af2-4e3b-b3ed-24750a7f0314.jpg?im_w=1200"}` }} />
+              <ListItem.Title style={styles.listview2}>{post.titulo}-{post?.images?.length}</ListItem.Title>
+            </View>
+            <View>
+            
+            
+            </View>
+
+              
             </ListItem.Content>
           </ListItem>
         );
       })}
     </ScrollView>
   );
+  }
 };
 
 export default UserPosts;
+
+const styles = StyleSheet.create({
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  listview: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  listview2: {
+    flex: 1,
+    flexDirection: 'row',
+    marginLeft: '5%',
+  },
+  image: {
+    width: 50,
+    height: 50,
+  }
+})
