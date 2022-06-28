@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from "react-native";
 import firebase from "firebase/compat";
 import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../context/userContext";
+import { getAdditionalUserInfo } from "firebase/auth";
 
 
 
 export default function UserDetails ({route, navigation}) {
 
-  const {user, setUser} = useUserContext();
+  const {user, setUser, getUser} = useUserContext();
   // const [user, setUser] = useState('');
 
   // const getUser = () => {
@@ -33,6 +34,10 @@ export default function UserDetails ({route, navigation}) {
     }
   }
 
+  useEffect(() => {
+    getUser();
+    console.log(user)
+  }, [])
 
 
   return (

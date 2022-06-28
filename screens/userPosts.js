@@ -9,7 +9,7 @@ import { useUserContext } from "../context/userContext";
 
 const UserPosts = (props) => {
 
-  const {user} = useUserContext();
+  const {user, getUser} = useUserContext();
   const userid = user.uid;
 
     const [search, setSearch] = useState('');
@@ -35,6 +35,7 @@ const UserPosts = (props) => {
         });
       }
       useEffect(() => {
+        getUser();
         if (userid && posts.length > 0) {
           searchFilterFunction(userid)
         }
@@ -86,7 +87,15 @@ const UserPosts = (props) => {
               <Text> no hay usuario </Text>
             </View>
           )
-        } else {
+        } 
+        else if (posts.length < 1) {
+          return(
+            <View>
+              <Text> no has hecho publicaciones pedazo de imbecil </Text>
+            </View>
+          )
+        }
+        else {
 
   return (
     <ScrollView>

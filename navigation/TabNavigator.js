@@ -29,11 +29,11 @@ const BottomTabNavigator = () => {
                 iconName = focused
                 ? 'search'
                 : 'search'
-            } else if (rn === "Reservaciones") {
+            } else if (rn === "Mis Reservaciones") {
                 iconName = focused
                 ? 'md-receipt'
                 : 'md-receipt-outline'
-            } else if (rn === "Publicaciones") {
+            } else if (rn === "Mis Publicaciones") {
               iconName = focused
               ? 'calendar'
               : 'calendar-outline'
@@ -55,8 +55,8 @@ const BottomTabNavigator = () => {
     })}
       >
         <Tab.Screen name="Buscar" component={SearchStackNavigator} />
-        <Tab.Screen name="Reservaciones" component={BookStackNavigator} />
-        <Tab.Screen name="Publicaciones" component={UserPostStackNavigator} />
+        <Tab.Screen name="Mis Reservaciones" component={BookStackNavigator} />
+        <Tab.Screen name="Mis Publicaciones" component={UserPostStackNavigator} />
         <Tab.Screen name="Usuario" component={UserStackNavigator} />
 
   

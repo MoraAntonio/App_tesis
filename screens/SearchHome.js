@@ -13,7 +13,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from "react-native";
 import PostCard from "../components/PostCard";
 const FAKE_IMAGES = [
@@ -98,6 +99,7 @@ const SearchHome = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.main}>
+      <Image style={styles.image} source={{ uri: '../assets/beach-wallpaper' }}/>
       <View className={styles.container}>
         <TextInput
           style={styles.textInputStyle}
@@ -165,6 +167,9 @@ const styles = StyleSheet.create({
   flatlist: {
     height: "100%",
     paddingBottom: 40,
+  },
+  image: {
+    resizeMode: 'cover',
   },
 
   button: {

@@ -76,7 +76,9 @@ const UserPostStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Mis Publicaciones" component={UserPosts} />
       <Stack.Screen name="Detalles" component={PostDetails} />
+      <Stack.Screen name="Ver Ubicacion" component={SeeMap} />
       <Stack.Screen name="Editar" component={UpdatePostScreen} />
+      <Stack.Screen name="Crear Ubicacion" component={GetMap} />
     </Stack.Navigator>
   );
 }

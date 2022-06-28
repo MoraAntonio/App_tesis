@@ -11,7 +11,7 @@ import { useUserContext } from "../context/userContext";
 
 const BookIndex = (props) => {
 
-  const {user} = useUserContext();
+  const {user, getUser} = useUserContext();
   const userid = user.uid;
     const [search, setSearch] = useState('');
     const [filteredDataSource, setFilteredDataSource] = useState([]);
@@ -56,6 +56,7 @@ const BookIndex = (props) => {
       }
 
       useEffect(() => {
+        getUser();
         if (userid && books.length > 0) {
           searchFilterFunction(userid)
         } else {
@@ -64,6 +65,7 @@ const BookIndex = (props) => {
       }, [books, userid])
     
       useEffect(() => {
+        getUser();
         if (userid) {
         getBooks();
         } else {

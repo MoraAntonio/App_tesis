@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ShadowPropTypesIOS,
   Alert,
+  Image,
 } from "react-native";
 
 import firebase from "../database/firebase";
@@ -132,43 +133,75 @@ const CheckInScreen = (props) => {
         
       </View>
 
-      <Text style={styles.list}>Fecha de inicio</Text>
-      <Text style={styles.list}>{date1.toDateString()}</Text>
+      <View style={{ display: "flex", flexDirection: "row", padding: 0 }}>
+          <View
+            style={{
+              borderWidth: 1,
+              height: 50,
+              width: "44%",
+              margin: 10,
+              borderRadius: 5,
+              padding: 10,
+              borderColor: "#00CFEB",
+            }}
+          >
+            <TouchableOpacity onPress={showDate1Picker}>
+              <Text>
+                <Image
+                  style={{ width: 10, height: 10 }}
+                  source={require("../assets/calendar.png")}
+                />{" "}
+                Desde:
+              </Text>
+              <Text style={{ fontSize: 12, width: "100%", marginLeft: 30 }}>
+                {printd1 || "Seleccionar"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              borderWidth: 1,
+              height: 50,
+              width: "44%",
+              margin: 10,
+              borderRadius: 5,
+              padding: 10,
+              borderColor: "#00CFEB",
+            }}
+          >
+            <TouchableOpacity onPress={showDate2Picker}>
+              <Text>
+                <Image
+                  style={{ width: 10, height: 10 }}
+                  source={require("../assets/calendar.png")}
+                />{" "}
+                Hasta:
+              </Text>
+              <Text style={{ fontSize: 12, width: "100%", marginLeft: 30 }}>
+                {printd2 || "Seleccionar"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-
-      {date1Picker && (
+        {/* DATE PICKERS */}
+        {date1Picker && (
           <DateTimePicker
             value={date1}
-            mode={'date'}
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            mode={"date"}
+            display={Platform.OS === "ios" ? "spinner" : "default"}
             is24Hour={true}
             onChange={onDate1Selected}
           />
         )}
-
-        {!date1Picker && (
-            <TouchableOpacity style={styles.button} onPress={showDate1Picker}>
-              <Text  style={styles.buttontext}>Seleccionar fecha de inicio</Text>
-            </TouchableOpacity>
-        )}
-
-      <Text style={styles.list}>Fecha de cierre</Text>
-      <Text style={styles.list}>{date2.toDateString()}</Text>
-
         {date2Picker && (
           <DateTimePicker
             value={date2}
-            mode={'date'}
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            mode={"date"}
+            display={Platform.OS === "ios" ? "spinner" : "default"}
             is24Hour={true}
             onChange={onDate2Selected}
           />
-        )}
-
-        {!date2Picker && (
-          <TouchableOpacity style={styles.button} onPress={showDate2Picker}>
-            <Text  style={styles.buttontext}>Seleccionar fecha de cierre</Text>
-          </TouchableOpacity>
         )}
 
         <TouchableOpacity style={styles.button} onPress={() => goSaveCheck()}>
@@ -188,11 +221,21 @@ const styles = StyleSheet.create({
       padding: 35,
     },
     inputGroup: {
-      flex: 1,
-      padding: 0,
-      marginBottom: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: "#cccccc",
+      
+        borderWidth: 1,
+        borderColor: "#f2f2f2",
+        width: "100%",
+        height: 50,
+        marginBottom: "5%",
+        marginTop: "1%",
+        backgroundColor: "#FFFFFF",
+        paddingLeft: 10,
+        borderRadius: 8,
+        shadowColor: "#171717",
+        shadowOffset: { width: -2, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 3,
     },
     loader: {
       left: 0,
@@ -204,17 +247,12 @@ const styles = StyleSheet.create({
       justifyContent: "center",
     },
     button: {
-      backgroundColor: '#4287f5',
-      marginTop: 5,
-      marginBottom: '10%',
-      paddingTop: '3%',
-      paddingBottom: '3%',
-      height: 50,
-      borderRadius: 15,
+    
     },
     buttontext: {
+      marginTop: '5%',
       textAlign: 'center',
-      color: '#ffffff',
+      color: '#5cc3ff',
       fontWeight: 'bold',
       fontSize: 15,
     },

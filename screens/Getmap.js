@@ -88,6 +88,14 @@ export default function GetMap(props) {
     })
   }
 
+  const goBackWithLocation2 = () => {
+    stopForegroundUpdate();
+    props.navigation.navigate('Editar', {
+    sharep: marker,
+    })
+  }
+
+
   return (
     <View style={styles.container}>
       <MapView
@@ -114,9 +122,19 @@ export default function GetMap(props) {
         )}
         
       </MapView>
-      <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation()}>
-         <Text style={styles.buttontext} >Publicar</Text>
-      </TouchableOpacity>
+
+      {props.route.params.edit && (
+        <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation2()}>
+          <Text style={styles.buttontext} >Guardar</Text>
+        </TouchableOpacity>
+      )}
+
+      {!props.route.params.edit && (
+        <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation()}>
+          <Text style={styles.buttontext} >Guardar</Text>
+        </TouchableOpacity>
+      )}
+      
       
    
     </View>

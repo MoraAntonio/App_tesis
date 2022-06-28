@@ -1,14 +1,13 @@
 import React, {useEffect} from "react";
 import { View, StyleSheet, Text, SafeAreaView, TextInput } from "react-native";
-import { getAuth } from "firebase/auth";
+import { useUserContext } from "../context/userContext";
 
 const WhiteSpace = ({navigation}) => {
 
-    const auth = getAuth();
-    const user = auth.currentUser;
+  const {user, setUser, getUser} = useUserContext();
 
     useEffect(() => {
-
+        getUser();
         if (user) {
           navigation.navigate('UserDetails');
         } else {

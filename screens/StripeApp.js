@@ -92,6 +92,7 @@ const StripeApp = props => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Pago por tarjeta</Text>
       <TextInput
         autoCapitalize="none"
         placeholder="E-mail"
@@ -110,7 +111,7 @@ const StripeApp = props => {
           setCardDetails(cardDetails);
         }}
       />
-      <Button onPress={handlePayPress} title="Pay" disabled={loading} />
+      <Button onPress={handlePayPress} title="Pagar" disabled={loading} />
     </View>
   );
 };
@@ -122,19 +123,44 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 20,
   },
-  input: {
-    backgroundColor: "#efefefef",
-
-    borderRadius: 8,
+  title: {
     fontSize: 20,
+    marginVertical: '4%',
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    width: "100%",
     height: 50,
-    padding: 10,
+    marginBottom: "5%",
+    marginTop: "1%",
+    backgroundColor: "#FFFFFF",
+    paddingLeft: 10,
+    borderRadius: 8,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   card: {
     backgroundColor: "#efefefef",
   },
   cardContainer: {
+    borderWidth: 1,
+    borderColor: "#f2f2f2",
+    width: "100%",
     height: 50,
-    marginVertical: 30,
+    marginBottom: "5%",
+    marginTop: "1%",
+    backgroundColor: "#FFFFFF",
+    paddingLeft: 10,
+    borderRadius: 8,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
 });

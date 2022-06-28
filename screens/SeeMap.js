@@ -67,8 +67,8 @@ export default function SeeMap(props) {
           }}/> 
         
       </MapView>
-      <TouchableOpacity style={styles.button} onPress={() => props.navigation.goBack()}>
-         <Text style={styles.buttontext} >Publicar</Text>
+      <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('Detalles')}>
+         <Text style={styles.buttontext} >Volver</Text>
       </TouchableOpacity>
       
    
