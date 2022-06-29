@@ -21,11 +21,12 @@
       "supportsTablet": true
     },
     "android": {
+      "config": { "googleMaps": { "apiKey": "AIzaSyC8Nkk1tY_6k9LJSzAKDu34W32QN06bvdo" } },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-        
-      }
+      },
+      "package": "com.TouLease"
     },
     "web": {
       "favicon": "./assets/favicon.png"
