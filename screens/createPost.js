@@ -48,7 +48,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 
 const CreatePostScreen = (props) => {
   //image upload
-  const {user, setUser} = useUserContext();
+  const { user, setUser } = useUserContext();
   const [images, setImages] = useState([]);
   const [b64Images, setB64Images] = useState([]);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -144,10 +144,10 @@ const CreatePostScreen = (props) => {
     handelResetInitialPosition,
   } = useMap();
 
-  
-const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
-const [hasCameraPermission, setHasCameraPermission] = useState(null);
-const [camera, setCamera] = useState(null);
+
+  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [camera, setCamera] = useState(null);
   const [state, setState] = useState(initalState);
   const [date1Picker, setDate1Picker] = useState(false);
   const [date2Picker, setDate2Picker] = useState(false);
@@ -183,9 +183,9 @@ const [camera, setCamera] = useState(null);
   };
 
   const printd1 =
-    date1.getDate() + "-" + date1.getMonth() + "-" + date1.getFullYear();
+    date1.getDate() + "-" + (date1.getMonth() + 1) + "-" + date1.getFullYear();
   const printd2 =
-    date2.getDate() + "-" + date2.getMonth() + "-" + date2.getFullYear();
+    date2.getDate() + "-" + (date2.getMonth() + 1)  + "-" + date2.getFullYear();
 
   const saveNewPost = async () => {
     const thisDate = new Date();
@@ -223,7 +223,7 @@ const [camera, setCamera] = useState(null);
         "Debe subir al menos una imagen"
       );
     }
-      else {
+    else {
       console.log(posc.latitude + "," + posc.longitude);
 
       console.log(b64Images.length);
@@ -243,6 +243,7 @@ const [camera, setCamera] = useState(null);
           contacto: state.contacto,
         });
         Alert.alert("Publicacion creada!");
+        props.navigation.goBack()
       } catch (error) {
         console.log(error);
       }
@@ -367,10 +368,10 @@ const [camera, setCamera] = useState(null);
             }}
             onLongPress={() => {
               console.log("pressed"),
-                {
-                  platitude: position.latitude,
-                  plongitude: position.longitude,
-                };
+              {
+                platitude: position.latitude,
+                plongitude: position.longitude,
+              };
             }}
           >
             <MapView
@@ -484,12 +485,12 @@ const [camera, setCamera] = useState(null);
           heading={""}
           images={images.map((item) => item.uri)}
           subheading={""}
-          onPress={() => {}}
+          onPress={() => { }}
           home={false}
         />
       )}
 
-        
+
       <View style={styles.square}>
         <TouchableOpacity style={styles.button2} onPress={() => saveNewPost()}>
           <Text style={styles.buttontext2}>Publicar</Text>

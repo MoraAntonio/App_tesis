@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react"
-import { StyleSheet,
+import {
+  StyleSheet,
   Text,
   View,
   Dimensions,
   TouchableOpacity,
-  } from "react-native"
+} from "react-native"
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { useMap } from '../functions/usemap';
 import * as TaskManager from "expo-task-manager"
 import * as Location from "expo-location"
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME"
 let foregroundSubscription = null
@@ -42,7 +44,7 @@ export default function GetMap(props) {
   useEffect(() => {
 
     startForegroundUpdate()
-    
+
   }, [])
 
   const requestPermissions = async () => {
@@ -84,14 +86,14 @@ export default function GetMap(props) {
   const goBackWithLocation = () => {
     stopForegroundUpdate();
     props.navigation.navigate('Crear Publicacion', {
-    sharep: marker,
+      sharep: marker,
     })
   }
 
   const goBackWithLocation2 = () => {
     stopForegroundUpdate();
     props.navigation.navigate('Editar', {
-    sharep: marker,
+      sharep: marker,
     })
   }
 
@@ -105,23 +107,27 @@ export default function GetMap(props) {
         provider={PROVIDER_GOOGLE}
         style={styles.mapStyle}
         showsCompass={true}
-        
+
         initialRegion={{
           latitude: position?.latitude,
           longitude: position?.longitude,
           latitudeDelta: 0.0100,
           longitudeDelta: 0.0100,
         }}
-        onPress={ e => {
+        onPress={e => {
           setMarker(e.nativeEvent.coordinate)
           console.log(marker)
         }
-      }>
+        }>
         {marker !== null && (
-          <Marker coordinate={marker}/> 
+          <Marker coordinate={marker} />
         )}
-        
+
       </MapView>
+
+      <TouchableOpacity style={styles.backbutton} onPress={() => props.navigation.goBack()}>
+      <Ionicons name={'arrow-undo'} size={25} color={'#fff'}/>
+        </TouchableOpacity>
 
       {props.route.params.edit == 1 && (
         <TouchableOpacity style={styles.button} onPress={() => goBackWithLocation2()}>
@@ -134,9 +140,9 @@ export default function GetMap(props) {
           <Text style={styles.buttontext} >Guardar</Text>
         </TouchableOpacity>
       )}
-      
-      
-   
+
+
+
     </View>
   )
 }
@@ -154,15 +160,32 @@ const styles = StyleSheet.create({
     paddingVertical: '5%',
   },
   button: {
-        backgroundColor: '#4287f5',
-        height: '10%',
-        width: '30%',
-        borderRadius: 7,
-        padding: '1%',
-        top: "85%",
-        left: "31%",
-        position: 'absolute',
-        elevation: 4,
-      
+    backgroundColor: '#4287f5',
+    height: '10%',
+    width: '30%',
+    borderRadius: 7,
+    padding: '1%',
+    paddingTop: 10,
+    top: "85%",
+    left: "35%",
+    position: 'absolute',
+    elevation: 4,
+    alignItems: 'center',
+  },
+  buttontext: {
+    color: 'white'
+  },
+  backbutton: {
+    backgroundColor: '#4287f5',
+    height: '10%',
+    width: '14%',
+    borderRadius: 7,
+    padding: '1%',
+    top: "2%",
+    left: "2%",
+    position: 'absolute',
+    elevation: 4,
+    alignItems: 'center',
+    padding: 5,
   },
 });

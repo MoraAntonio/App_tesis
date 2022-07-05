@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "75409989498",
+    "project_id": "turismo2-a5a22",
+    "storage_bucket": "turismo2-a5a22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75409989498:android:6af5a16258e5216cba40c3",
+        "android_client_info": {
+          "package_name": "com.TouLease"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75409989498-1404bnpebabdvf0epn1i0v2bdhr9g624.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8xHI7VOTC8Fek7SuOOWE38FOdYywnKzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75409989498-1404bnpebabdvf0epn1i0v2bdhr9g624.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

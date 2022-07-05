@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import firebase from "../database/firebase";
-import { COLORS } from "../values/colors";
 
 // import all the components we are going to use
 import { getAuth } from "firebase/auth";
@@ -80,7 +79,7 @@ const SearchHome = ({ route, navigation }) => {
       });
     }
   };
-// mover a creacion de posts y no aqui
+  // mover a creacion de posts y no aqui
 
 
 
@@ -97,88 +96,81 @@ const SearchHome = ({ route, navigation }) => {
   }
   else {
 
-  return (
-    <SafeAreaView style={styles.main}>
-      <View className={styles.container}>
-      
-        <TextInput
-          style={styles.textInputStyle}
-          onChangeText={(text) => searchFilterFunction(text)}
-          value={search}
-          underlineColorAndroid="transparent"
-          placeholder="Search Here"
-        />
-        {search !== "" && (
-          <FlatList
-            data={filteredDataSource}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <PostCard
-                heading={item.titulo}
-                images={item.images}
-                subheading={item.precio}
-                onPress={() =>
-                  navigation.navigate("Detalles", {
-                    postId: item.id,
-                  })
-                }
-                home
-              />
-            )}
-          />
-        )}
-{search === "" && (
-          <FlatList
-            data={posts}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <PostCard
-                heading={item.titulo}
-                images={item.images}
-                subheading={item.precio}
-                onPress={() =>
-                  navigation.navigate("Detalles", {
-                    postId: item.id,
-                  })
-                }
-                home
-              />
-            )}
-          />
-        )}
-      </View>
+    return (
+      <SafeAreaView style={styles.main}>
+        <View className={styles.container}>
+          
 
-      <TouchableOpacity style={styles.postbutton} onPress={gotocreate}>
-        <Text style={styles.postbuttontext}>+</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
-  )};
+          <TextInput
+            style={styles.textInputStyle}
+            onChangeText={(text) => searchFilterFunction(text)}
+            value={search}
+            underlineColorAndroid="transparent"
+            placeholder="Busque Aqui"
+          />
+          {search !== "" && (
+            <FlatList
+              data={filteredDataSource}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <PostCard
+                  heading={item.titulo}
+                  images={item.images}
+                  subheading={item.precio}
+                  onPress={() =>
+                    navigation.navigate("Detalles", {
+                      postId: item.id,
+                    })
+                  }
+                  home
+                />
+              )}
+            />
+          )}
+          {search === "" && (
+            <FlatList
+              data={posts}
+              keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <PostCard
+                  heading={item.titulo}
+                  images={item.images}
+                  subheading={item.precio}
+                  onPress={() =>
+                    navigation.navigate("Detalles", {
+                      postId: item.id,
+                    })
+                  }
+                  home
+                />
+              )}
+            />
+          )}
+        </View>
+
+        <TouchableOpacity style={styles.postbutton} onPress={gotocreate}>
+          <Text style={styles.postbuttontext}>+</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    )
+  };
 };
 const styles = StyleSheet.create({
   main: {
     backgroundColor: "#FFFFFF",
+    paddingBottom: '30%',
   },
   container: {
     flex: 1,
     backgroundColor: "#fff",
   },
-  flatlist: {
-    height: "100%",
-    paddingBottom: 40,
-  },
   image: {
     resizeMode: 'cover',
   },
 
-  button: {
-    marginTop: "5%",
-    backgroundColor: "#dedede",
-    width: "50%",
-    paddingVertical: "3%",
-    borderRadius: 4,
-  },
+
   buttontext: {
     textAlign: "center",
     color: "#ff00c8",
@@ -236,6 +228,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: "2%",
     color: "#fff",
+  },
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "trial",
-    "slug": "trial",
+    "name": "TouLease",
+    "slug": "TouLease",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,7 +26,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.TouLease"
+      "package": "com.TouLease",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

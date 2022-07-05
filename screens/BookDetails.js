@@ -10,29 +10,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  serverTimestamp,
-  query,
-  orderBy,
-} from "firebase/firestore";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 //mapa
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { useMap } from "../functions/usemap";
-import * as Location from "expo-location";
 import firebase from "../database/firebase";
-import { AuthErrorCodes, getAdditionalUserInfo, getAuth } from "firebase/auth";
 import { useUserContext } from "../context/userContext";
 
-//custom components
-import ItemDivider from "../components/ItemDivider";
-import PostCard from "../components/PostCard";
 
 const PostDetails = (props) => {
   //estado inicial
@@ -55,6 +41,15 @@ const PostDetails = (props) => {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('');
 
+  const finicio = book.fecha_inicio;
+  const ffinal = book.fecha_fin;
+  const fpublic = post.fecha_publicacion;
+  const thisDate = new Date();
+
+  const finicio2 = new Date(finicio.seconds * 1000);
+  const ffinal2 = new Date(ffinal.seconds * 1000);
+  const fpublic2 = new Date(fpublic.seconds * 1000);
+
   //obtener usuario
 
   //funciones del mapa
@@ -72,40 +67,18 @@ const PostDetails = (props) => {
     const doc = await dbRef.get();
     const post = doc.data();
     setPost({ ...post, id: doc.id });
-    console.log(post?.ubicacion);
     setLoading(false);
-    
   };
-
-  const getStatus = () => {
-    //const tdifference = date2.getTime() - date1.getTime();
-    if (ffinal > thisDate.getTime()){
-      setStatus('Terminado') 
-     } else {
-      setStatus('En curso')  
-        }
-      
-    }
 
   const getBookById = async (id) => {
     const dbRef = firebase.db.collection("reservaciones").doc(id);
     const doc = await dbRef.get();
     const book = doc.data();
     setBook({ ...book, id: doc.id });
-    setLoading(false);
     getPostById(book.id_publicacion);
     
-    console.log(post)
+    
   };
-
-  const finicio = book.fecha_inicio;
-  const ffinal = book.fecha_fin;
-  const fpublic = post.fecha_publicacion;
-  const thisDate = new Date();
-
-  const finicio2 = new Date(finicio.seconds * 1000);
-  const ffinal2 = new Date(ffinal.seconds * 1000);
-  const fpublic2 = new Date(fpublic.seconds * 1000);
 
   const printd1 =
     finicio2.getDate() +
@@ -128,8 +101,10 @@ const PostDetails = (props) => {
 
   //cargar al iniciar
   useEffect(() => {
+    
     getBookById(props.route.params.bookId);
-    getStatus()
+ 
+    
   }, [props.route.params.bookId]);
 
   if (loading) {
@@ -141,7 +116,7 @@ const PostDetails = (props) => {
   } else {
     return (
       <ScrollView style={styles.container}>
-       
+
 
         <View style={styles.square}>
           <View style={styles.parWrapper}>
@@ -164,11 +139,6 @@ const PostDetails = (props) => {
           <View style={styles.parWrapper}>
             <Text style={styles.par}>Total:</Text>
             <Text style={styles.par}>${book.total}</Text>
-          </View>
-
-          <View style={styles.parWrapper}>
-            <Text style={styles.par}>Estado:</Text>
-            <Text style={styles.par}>{status}</Text>
           </View>
 
           <View style={styles.parWrapper}>
@@ -209,7 +179,7 @@ const PostDetails = (props) => {
             </MapView>
           </TouchableOpacity>
 
-         
+
         </View>
       </ScrollView>
     );
@@ -227,6 +197,15 @@ const styles = StyleSheet.create({
     height: 300,
     marginBottom: "5%",
     borderRadius: 20,
+  },
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   square: {

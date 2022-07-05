@@ -20,7 +20,7 @@ export default function LoginScreen({ route, navigation }) {
   const [password, setPassword] = React.useState("");
   const [currentUser, setCurrentUser] = React.useState("");
   const auth = getAuth(app);
-  const {user, getUser} = useUserContext();
+  const { user, getUser, setUser } = useUserContext();
 
   //ir a pantalla de registro de usuario
   const goToSignup = () => {
@@ -41,17 +41,15 @@ export default function LoginScreen({ route, navigation }) {
         alert(error);
       });
   };
-return (
+  return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
         <View style={styles.login}>
-          <Image
+        <Image
             style={styles.image}
-            source={{
-              uri: "https://cdn.logo.com/hotlink-ok/logo-social.png",
-            }}
+            source={require('../assets/Toulease_icon.jpg')}
           />
-          <Text style={styles.label}>E-mail</Text>
+          <Text style={styles.label}>Correo Electronico</Text>
           <TextInput
             onChangeText={(text) => setEmail(text)}
             style={styles.input}
@@ -71,7 +69,7 @@ return (
           </TouchableOpacity>
           <TouchableOpacity onPress={goToSignup} style={styles.registerWrapper}>
             <Text>
-              ¿No tienes una cuenta?{" "}
+              No tienes una cuenta?{" "}
               <Text style={styles.registerButton}>Registrate!</Text>
             </Text>
           </TouchableOpacity>

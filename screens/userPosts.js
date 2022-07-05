@@ -9,128 +9,129 @@ import { useUserContext } from "../context/userContext";
 
 const UserPosts = (props) => {
 
-  const {user, getUser} = useUserContext();
+  const { user, getUser } = useUserContext();
   const userid = user.uid;
 
-    const [search, setSearch] = useState('');
-    const [filteredDataSource, setFilteredDataSource] = useState([]);
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-  
-    const getPosts = () => {
-        firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
-          const posts = [];
-          querySnapshot.docs.forEach((doc) => {
-            const { titulo, precio, descripcion, id_arrendador, images } = doc.data();
-            posts.push({
-              id: doc.id,
-              titulo,
-              precio,
-              descripcion,  
-              id_arrendador,
-              images,
-            });
-          });
-          setPosts(posts);
+  const [search, setSearch] = useState('');
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getPosts = () => {
+    firebase.db.collection("publicaciones").onSnapshot((querySnapshot) => {
+      const posts = [];
+      querySnapshot.docs.forEach((doc) => {
+        const { titulo, precio, descripcion, id_arrendador, images } = doc.data();
+        posts.push({
+          id: doc.id,
+          titulo,
+          precio,
+          descripcion,
+          id_arrendador,
+          images,
         });
-        
-        setLoading(false);
-      }
-      useEffect(() => {
-        getUser();
-        if (userid && posts.length > 0) {
-          searchFilterFunction(userid)
-        }
-      }, [posts, userid])
-    
-      useEffect(() => {
-        if (userid) {
-        getPosts();
-        } else {
-          
-        setLoading(false);
-        }
-      }, [userid]);
-    
-      const searchFilterFunction = (userid) => {
-        //Validacion si la barra de busqueda no esta en blanco
-        if (userid) {
-          console.log("-----------------------")
-          console.log(posts.length)
-          console.log({userid, posts:posts.map(p=>p.id_arrendador)});
-          const _newData = posts.filter((item ) => item.id_arrendador?.toLowerCase() === userid.toLowerCase())
-          console.log("MIS ARRIENDOS", _newData.length)
-          // const newData = posts.filter(function (item) {
-          //   // Aplicar filtro con el texto en la barra de busqueda
-          //   const itemData = item.id_arrendador
-          //   const textData = userid;
-          //   return itemData.indexOf(textData) > -1;
-          // });
-          setFilteredDataSource(_newData);
-          setSearch(userid);
-        } else {
-          //crear cartas para todas las publicaciones
-          getPosts();
-          setFilteredDataSource(posts);
-          setSearch(id_arrendador);
-        }
-        setLoading(false);
-      };
+      });
+      setPosts(posts);
+    });
 
-      if (loading) {
-        return (
-          <View style={styles.loader}>
-            <ActivityIndicator size="large" color="#9E9E9E" />
-          </View>
-        );
+    setLoading(false);
+  }
+  useEffect(() => {
+    getUser();
+    if (userid && posts.length > 0) {
+      searchFilterFunction(userid)
+    }
+  }, [posts, userid])
 
-        } else if (!userid) {
-          return(
-            <View style={styles.center}>
-             <Text style={{fontSize: 15, color: 'red'}}> Inicie sesion para ver sus publicaciones </Text>
-            </View>
-          )
-        } 
-        else if (posts.length < 1) {
-          return(
-            <View style={styles.center}>
-              
-            </View>
-          )
-        }
-        else {
+  useEffect(() => {
+    if (userid) {
+      getPosts();
+    } else {
 
-  return (
-    <ScrollView>
-      {filteredDataSource.map((post) => {
-        return (
-          <ListItem
-            key={post.id}
-            bottomDivider
-            onPress={() => {
+      setLoading(false);
+    }
+  }, [userid]);
+
+  const searchFilterFunction = (userid) => {
+    //Validacion si la barra de busqueda no esta en blanco
+    if (userid) {
+      console.log("-----------------------")
+      console.log(posts.length)
+      console.log({ userid, posts: posts.map(p => p.id_arrendador) });
+      const _newData = posts.filter((item) => item.id_arrendador?.toLowerCase() === userid.toLowerCase())
+      console.log("MIS ARRIENDOS", _newData.length)
+      // const newData = posts.filter(function (item) {
+      //   // Aplicar filtro con el texto en la barra de busqueda
+      //   const itemData = item.id_arrendador
+      //   const textData = userid;
+      //   return itemData.indexOf(textData) > -1;
+      // });
+      setFilteredDataSource(_newData);
+      setSearch(userid);
+    } else {
+      //crear cartas para todas las publicaciones
+      getPosts();
+      setFilteredDataSource(posts);
+      setSearch(id_arrendador);
+    }
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#9E9E9E" />
+      </View>
+    );
+
+  } else if (!userid) {
+    return (
+      <View style={styles.center}>
+        <Text style={{ fontSize: 15, color: 'red' }}> Inicie sesion para ver sus publicaciones </Text>
+      </View>
+    )
+  }
+  else if (posts.length < 1) {
+    return (
+      <View style={styles.center}>
+
+      </View>
+    )
+  }
+  else {
+
+    return (
+      <ScrollView>
+        {filteredDataSource.map((post) => {
+          return (
+            <ListItem
+              key={post.id}
+              bottomDivider
+              onPress={() => {
                 props.navigation.navigate("Detalles", {
                   postId: post.id,
                 })
-            }}
-          >
-            <ListItem.Chevron />
-            <ListItem.Content>
-            <View style={styles.listview}>
-              <Image  style={styles.image} source={{ uri: `data:image/png;base64,${post?.images?.[0] ||  "https://a0.muscache.com/im/pictures/7b0190c7-3af2-4e3b-b3ed-24750a7f0314.jpg?im_w=1200"}` }} />
-              <ListItem.Title style={styles.listview2}>{post.titulo}-{post?.images?.length}</ListItem.Title>
-            </View>
-            <View>
-            
-            
-            </View>
+              }}
+            >
+              <ListItem.Chevron />
+              <ListItem.Content>
+                <View style={styles.listview}>
+                  <Image style={styles.image} source={{ uri: `data:image/png;base64,${post?.images?.[0] || "https://a0.muscache.com/im/pictures/7b0190c7-3af2-4e3b-b3ed-24750a7f0314.jpg?im_w=1200"}` }} />
+                  <ListItem.Title style={styles.listview2}>{post.titulo}</ListItem.Title>
+                  <ListItem.Title style={styles.listview2}>{post.precio}</ListItem.Title>
+                </View>
+                <View>
 
-              
-            </ListItem.Content>
-          </ListItem>
-        );
-      })}
-    </ScrollView>
-  );
+
+                </View>
+
+
+              </ListItem.Content>
+            </ListItem>
+          );
+        })}
+      </ScrollView>
+    );
   }
 };
 

@@ -10,22 +10,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  serverTimestamp,
-  query,
-  orderBy,
-} from "firebase/firestore";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 //mapa
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { useMap } from "../functions/usemap";
-import * as Location from "expo-location";
 import firebase from "../database/firebase";
 import { AuthErrorCodes, getAdditionalUserInfo, getAuth } from "firebase/auth";
 import { useUserContext } from "../context/userContext";
@@ -82,6 +72,8 @@ const PostDetails = (props) => {
   const ffinal2 = new Date(ffinal.seconds * 1000);
   const fpublic2 = new Date(fpublic.seconds * 1000);
 
+  const thisDate = new Date();
+
   const printd1 =
     finicio2.getDate() +
     "-" +
@@ -100,6 +92,18 @@ const PostDetails = (props) => {
     (fpublic2.getMonth() + 1) +
     "-" +
     fpublic2.getFullYear();
+
+    const goToCheck = () => {
+      if (thisDate > ffinal2) {
+        Alert.alert('Este servicio ya no esta disponible');
+      } else {
+        props.navigation.navigate("Reservar", {
+          postId: post.id,
+        });
+        console.log(ffinal2);
+        console.log(thisDate);
+      }
+    }
 
   //cargar al iniciar
   useEffect(() => {
@@ -136,7 +140,7 @@ const PostDetails = (props) => {
                   (base64) => `data:image/png;base64,${base64}`
                 )}
                 subheading={""}
-                onPress={() => {}}
+                onPress={() => { }}
                 home={false}
               />
             </>
@@ -219,9 +223,7 @@ const PostDetails = (props) => {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                props.navigation.navigate("Reservar", {
-                  postId: post.id,
-                });
+                goToCheck();
               }}
             >
               <Text style={styles.buttontxt}>Reservar</Text>

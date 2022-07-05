@@ -1,26 +1,26 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Text, SafeAreaView, TextInput, ActivityIndicator } from "react-native";
 import { useUserContext } from "../context/userContext";
 
-const WhiteSpace = ({navigation}) => {
+const WhiteSpace = ({ navigation }) => {
 
-  const {user, setUser, getUser} = useUserContext();
+  const { user, setUser, getUser } = useUserContext();
 
-    useEffect(() => {
-        getUser();
-        if (user.uid) {
-          navigation.navigate('UserDetails');
-        } else {
-            navigation.navigate('Login'); 
-        }
-      }, []);
+  useEffect(() => {
+    getUser();
+    if (user.uid) {
+      navigation.navigate('UserDetails');
+    } else {
+      navigation.navigate('Login');
+    }
+  }, [user.uid]);
 
   return (
-      <View style={styles.center} >
-        <ActivityIndicator size="large" color="#9E9E9E" />
-      </View>
+    <View style={styles.center} >
+      <ActivityIndicator size="large" color="#9E9E9E" />
+    </View>
 
-  
+
   );
 };
 

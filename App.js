@@ -9,7 +9,7 @@ import { StripeProvider } from "@stripe/stripe-react-native";
 import { UserProvider } from "./context/userContext";
 
  const App = () => {
-
+//expo build:android -t apk
 
   return (
 

@@ -29,7 +29,7 @@ const BottomTabNavigator = () => {
                 iconName = focused
                 ? 'search'
                 : 'search'
-            } else if (rn === "Mis Reservaciones") {
+            } else if (rn === "Mis Reservas") {
                 iconName = focused
                 ? 'md-receipt'
                 : 'md-receipt-outline'
@@ -47,7 +47,8 @@ const BottomTabNavigator = () => {
         },
         tabBarActiveTintColor: "#44abdf",
         tabBarInactiveTintColor: 'grey',
-        tabBarLabelStyle: {paddingBottom: 8, fontSize: 11,},
+        tabBarLabelStyle: {paddingBottom: 8, fontSize: 11},
+        
         tabBarStyle: {padding: 10, 
                       height: 60, 
                       backgroundColor: '#dddddd',
@@ -55,7 +56,7 @@ const BottomTabNavigator = () => {
     })}
       >
         <Tab.Screen name="Buscar" component={SearchStackNavigator} />
-        <Tab.Screen name="Mis Reservaciones" component={BookStackNavigator} />
+        <Tab.Screen name="Mis Reservas" component={BookStackNavigator} />
         <Tab.Screen name="Mis Publicaciones" component={UserPostStackNavigator} />
         <Tab.Screen name="Usuario" component={UserStackNavigator} />
 

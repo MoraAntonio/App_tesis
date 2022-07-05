@@ -7,6 +7,8 @@ import {
   Alert,
   ActivityIndicator,
   StyleSheet,
+  Text,
+  TouchableOpacity,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -65,9 +67,14 @@ const UpdateUserScreen = (props) => {
         />
       </View>
 
-      <View>
-        <Button title="Update" onPress={() => updateUser()} color="#19AC52" />
-      </View>
+      <TouchableOpacity onPress={() => updateUser()} style={styles.button}>
+            <Text style={styles.buttonText}>Actualizar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => logout()} style={styles.button2}>
+            <Text style={styles.buttonText}>Eliminar Usuario</Text>
+      </TouchableOpacity>
+
     </ScrollView>
   );
 };
@@ -77,6 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 35,
     backgroundColor: '#e6e6e6',
+    alignContents: 'center',
   },
   loader: {
     left: 0,
@@ -103,8 +111,34 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 3,
   },
-  btn: {
-    marginBottom: 7,
+  button: {
+    width: "100%",
+    marginVertical: "2%",
+    borderRadius: 8,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    backgroundColor: "#00CFEB",
+    elevation: 3,
+  },
+  button2: {
+    width: "100%",
+    marginVertical: "2%",
+    borderRadius: 8,
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    backgroundColor: "#c9140a",
+    elevation: 3,
+  },
+  buttonText: {
+    textAlign: "center",
+    paddingVertical: "4%",
+    fontSize: 15,
+    color: "white",
+    fontWeight: "bold",
   },
 });
 

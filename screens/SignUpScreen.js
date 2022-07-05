@@ -42,15 +42,13 @@ export default function SignUpScreen({ route, navigation }) {
       })
       .catch((error) => alert(error.message));
   };
-return (
+  return (
     <View style={styles.container}>
       <ScrollView style={styles.scroll}>
         <View style={styles.login}>
           <Image
             style={styles.image}
-            source={{
-              uri: "https://cdn.logo.com/hotlink-ok/logo-social.png",
-            }}
+            source={require('../assets/Toulease_icon.jpg')}
           />
           <Text style={styles.label}>Nombre completo</Text>
           <TextInput

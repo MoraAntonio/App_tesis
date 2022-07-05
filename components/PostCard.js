@@ -118,5 +118,5 @@ const styles = StyleSheet.create({
   starContainer: { flexDirection: "row" },
   starText: { marginLeft: 5 },
   heading: { fontSize: 20 },
-  subheading: { fontSize: 18, marginTop: 5 },
+  subheading: { fontSize: 18, marginTop: 5, marginBottom: 10 },
 });

@@ -7,14 +7,14 @@ import { getAdditionalUserInfo } from "firebase/auth";
 
 
 
-export default function UserDetails ({route, navigation}) {
+export default function UserDetails({ route, navigation }) {
 
-  const {user, setUser, getUser} = useUserContext();
+  const { user, setUser, getUser } = useUserContext();
   const [loading, setLoading] = useState(true)
   // const [user, setUser] = useState('');
 
   // const getUser = () => {
-    
+
   //   const auth = getAuth();
   //   const cuser = auth.currentUser;
   //   setUser(cuser);
@@ -27,18 +27,17 @@ export default function UserDetails ({route, navigation}) {
 
   const signOutUser = async () => {
     try {
-       firebase.auth().signOut();
-       setUser({});
-       navigation.navigate('Login');  
+      firebase.auth().signOut();
+      setUser({});
+      navigation.navigate('Login');
     } catch (e) {
-        console.log(e);
+      console.log(e);
     }
   }
 
   useEffect(() => {
     getUser();
-    console.log(user)
-    if (user){
+    if (user) {
       setLoading(false);
     }
   }, [])
@@ -47,23 +46,23 @@ export default function UserDetails ({route, navigation}) {
   return (
     <ScrollView style={styles.container}>
 
-    <View>
-      <Text style ={styles.userTitle}> Ha ingresado como</Text>
-      <Text style ={styles.userTitle2}>{user.displayName}</Text>
-    </View>
+      <View>
+        <Text style={styles.userTitle}> Ha ingresado como</Text>
+        <Text style={styles.userTitle2}>{user.displayName}</Text>
+      </View>
 
-    <TouchableOpacity style={styles.button1} onPress={calluser}>
-      <Text style={styles.buttontxt}>Editar usuario</Text>
-    </TouchableOpacity>
+      <TouchableOpacity style={styles.button1} onPress={calluser}>
+        <Text style={styles.buttontxt}>Editar usuario</Text>
+      </TouchableOpacity>
 
-    <TouchableOpacity style={styles.button2} onPress={signOutUser}>
-      <Text style={styles.buttontxt}>Cerrar sesion</Text>
-    </TouchableOpacity>
-    <View></View>
+      <TouchableOpacity style={styles.button2} onPress={signOutUser}>
+        <Text style={styles.buttontxt}>Cerrar sesion</Text>
+      </TouchableOpacity>
+      <View></View>
 
     </ScrollView>
 
-  
+
   );
 };
 
@@ -112,5 +111,6 @@ const styles = StyleSheet.create({
     color: '#5cc3ff',
     textAlign: 'center',
     fontWeight: '900',
+    fontFamily: 'sans-serif',
   }
 });

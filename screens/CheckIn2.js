@@ -1,63 +1,77 @@
-import React, {useState, useEffect} from "react";
-import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Button, ActivityIndicator } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Button, ActivityIndicator, Alert } from "react-native";
 
 import firebase from "../database/firebase";
 import StripeApp from "./StripeApp";
+import { getAuth } from "firebase/auth";
+import { useUserContext } from "../context/userContext";
+
 
 const CheckIn2 = (props) => {
 
-    const [post, setPost] = useState('');
-    const [loading, setLoading] = useState(true);
 
-    const getPostById = async (id) => {
-        const dbRef = firebase.db.collection("publicaciones").doc(id);
-        const doc = await dbRef.get();
-        const post = doc.data();
-        setPost({ ...post, id: doc.id });
-        setLoading(false);
-        //console.log(post);
-      };
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-      const cdate1 = props.route.params.checkhold.cdate1;
-      const cdate2 = props.route.params.checkhold.cdate2;
+  const { setUser, getUser } = useUserContext();
 
-      const tdifference = cdate2.getTime() 
-      - cdate1.getTime();
-  
-      const days = tdifference / (1000 * 3600 * 24); 
-      const thisDate = new Date();
-      const amount1 = days * post.precio;
-    
-      const printd1 =
-        cdate1.getDate() +
-        "-" +
-        (cdate1.getMonth() + 1) +
-        "-" +
-        cdate1.getFullYear();
-      const printd2 =
-        cdate2.getDate() +
-        "-" +
-        (cdate2.getMonth() + 1) +
-        "-" +
-        cdate2.getFullYear();
-      
+  const [post, setPost] = useState('');
+  const [loading, setLoading] = useState(true);
 
-      useEffect(() => {
-        getPostById(props.route.params.checkhold.postId);
-      }, [props.route.params.checkhold]);
+  const getPostById = async (id) => {
+    const dbRef = firebase.db.collection("publicaciones").doc(id);
+    const doc = await dbRef.get();
+    const post = doc.data();
+    setPost({ ...post, id: doc.id });
+    setLoading(false);
+    //console.log(post);
+  };
+
+  const cdate1 = props.route.params.checkhold.cdate1;
+  const cdate2 = props.route.params.checkhold.cdate2;
+
+  const tdifference = cdate2.getTime()
+    - cdate1.getTime();
+
+  const days = tdifference / (1000 * 3600 * 24);
+  const thisDate = new Date();
+  const amount1 = days * post.precio;
+
+  const printd1 =
+    cdate1.getDate() +
+    "-" +
+    (cdate1.getMonth() + 1) +
+    "-" +
+    cdate1.getFullYear();
+  const printd2 =
+    cdate2.getDate() +
+    "-" +
+    (cdate2.getMonth() + 1) +
+    "-" +
+    cdate2.getFullYear();
 
 
-      if (loading) {
-        return (
-          <View style={styles.loader}>
-            <ActivityIndicator size="large" color="#9E9E9E" />
-          </View>
-        );
-      } else {
-  return (
-       <View>
+  useEffect(() => {
+    getPostById(props.route.params.checkhold.postId);
+    getUser();
+    if (!user) {
+      Alert.alert('Debe iniciar sesion para realizar una reservacion');
+      props.navigation.navigate('Detalles');
+    }
+  }, [props.route.params.checkhold]);
+
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#9E9E9E" />
+      </View>
+    );
+  } else {
+    return (
+      <View>
         <View style={styles.square}>
-        <View style={styles.parWrapper}>
+          <View style={styles.parWrapper}>
             <Text style={styles.par}>Primer dia:</Text>
             <Text style={styles.par}>{printd1}</Text>
           </View>
@@ -81,22 +95,24 @@ const CheckIn2 = (props) => {
             <Text style={styles.par}>Total a pagar:</Text>
             <Text style={styles.par}>{amount1}$</Text>
           </View>
-          
+
         </View>
 
-       <Button title={'pagar'} onPress={() => {
-        console.log(amount1)
-        props.navigation.navigate('Detalles de pago', {
-          amount: amount1,
-          checkhold: props.route.params.checkhold,
-        })
-      }}></Button>
-        
+        <Button title={'pagar'} onPress={() => {
+          console.log(amount1)
+          console.log(props.route.params.checkhold.titulo)
+          props.navigation.navigate('Detalles de pago', {
+            amount: amount1,
+            checkhold: props.route.params.checkhold,
+          })
+        }}></Button>
 
-       </View>
 
-  
-  )}
+      </View>
+
+
+    )
+  }
 };
 
 const styles = StyleSheet.create({
@@ -180,6 +196,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

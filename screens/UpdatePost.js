@@ -154,8 +154,8 @@ const UpdatePostScreen = (props) => {
     setPost({ ...post, [name]: value});
   };
 
-  const printd1 = date1.getDate() + '-' + date1.getMonth() + '-' + date1.getFullYear();
-  const printd2 = date2.getDate() + '-' + date2.getMonth() + '-' + date2.getFullYear();
+  const printd1 = date1.getDate() + '-' + (date1.getMonth() + 1) + '-' + date1.getFullYear();
+  const printd2 = date2.getDate() + '-' + (date2.getMonth() + 1) + '-' + date2.getFullYear();
   const thisDate = new Date();
 
   const updatePost = async () => {
@@ -395,6 +395,15 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     flex: 1,
+  },
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   square: {
