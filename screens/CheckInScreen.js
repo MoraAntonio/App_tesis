@@ -113,7 +113,7 @@ const CheckInScreen = (props) => {
       console.log(state.cpers)
       console.log(post.max_personas)
       Alert.alert('El maximo de personas para este servicio es de: ' + post.max_personas)
-    } else if (state.cpers < post.max_personas) {
+    } else if (state.cpers > post.max_personas) {
       
     }
     else if (printd1 === printd2) {
