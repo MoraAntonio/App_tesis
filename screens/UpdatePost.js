@@ -201,9 +201,9 @@ const UpdatePostScreen = (props) => {
           fecha_inicio: state.fecha_inicio,
           fecha_fin: state.fecha_fin,
           ubicacion: posc,
-          images: '',
         });
         Alert.alert('Publicacion actualizada');
+        
         props.navigation.goBack();
       };
     }

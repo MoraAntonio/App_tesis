@@ -218,15 +218,18 @@ const CreatePostScreen = (props) => {
       Alert.alert(
         "La ubicacion debe encontrarse dentro del territorio venezolano"
       );
-    } else if (images.length == 0) {
+    }
+      else if (!posc) {
+        Alert.alert('Verifique su ubicacion en el mapa');
+      }
+      else if (images.length == 0) {
       Alert.alert(
         "Debe subir al menos una imagen"
       );
     }
     else {
-      console.log(posc.latitude + "," + posc.longitude);
 
-      console.log(b64Images.length);
+      Alert.alert(user.uid)
       try {
         await firebase.db.collection("publicaciones").add({
           titulo: state.titulo,
@@ -237,7 +240,7 @@ const CreatePostScreen = (props) => {
           fecha_publicacion: new Date(),
           id_arrendador: user.uid,
           nombre_arrendador: user.displayName,
-          ubicacion: posc,
+          ubicacion: posc || position,
           max_personas: state.max_personas,
           images: b64Images,
           contacto: state.contacto,
@@ -263,7 +266,6 @@ const CreatePostScreen = (props) => {
     );
 
     const cname = response.data.countryName;
-    console.log(response.data);
     if (cname.toLowerCase() !== "venezuela") {
       console.log("La ubicacion no esta en Venezuela!");
       setIsHere(false);
@@ -272,8 +274,6 @@ const CreatePostScreen = (props) => {
         estado: response.data.localityInfo.administrative[2].isoName,
         ciudad: response.data.city,
       });
-      console.log(response.data);
-      console.log(direccion);
       setIsHere(true);
     }
   };
@@ -294,8 +294,7 @@ const CreatePostScreen = (props) => {
   }, [props.route.params.sharep]);
 
   useEffect(() => {
-    console.log(images);
-  }, [images]);
+  }, []);
 
   return (
     <ScrollView style={styles.container}>

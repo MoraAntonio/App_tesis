@@ -1,12 +1,8 @@
-import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { useState } from "react";
-import BottomTabNavigator from "./navigation/TabNavigator";
-import 'react-native-gesture-handler';
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import StripeApp from "./screens/StripeApp";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import 'react-native-gesture-handler';
 import { UserProvider } from "./context/userContext";
+import BottomTabNavigator from "./navigation/TabNavigator";
 
  const App = () => {
 //expo build:android -t apk
